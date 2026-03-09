@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Cascina - Albiate</title>
+    <style>
+        :root { 
+            --gold: #d4af37; 
+            --bg-page: #0d0d0d; 
+        }
+        
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-page); color: white; 
+            display: flex; align-items: center; justify-content: center; 
+        }
+        
+        .wrapper { width: 90%; max-width: 400px; text-align: center; }
+
+        .logo-img { width: 100%; max-width: 280px; height: auto; margin-bottom: 10px; }
+        
+        .tagline { 
+            color: var(--gold); font-size: 0.85rem; font-style: italic; 
+            letter-spacing: 2px; margin-bottom: 45px; opacity: 0.9;
+        }
+        
+        .links { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+        
+        .btn { 
+            text-decoration: none; padding: 18px; border-radius: 12px; 
+            font-weight: bold; text-transform: uppercase; font-size: 0.9rem; 
+            transition: all 0.3s ease; display: block; 
+        }
+        
+        .btn-menu { background: var(--gold); color: black; border: none; }
+        .btn-eventi { background: white; color: black; border: none; } /* Tasto eventi bianco per staccare */
+        .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+        .btn-outline { border: 1.5px solid rgba(255,255,255,0.4); color: white; }
+        
+        .btn:active { transform: scale(0.97); opacity: 0.8; }
+        
+        .footer { margin-top: 50px; font-size: 0.6rem; color: #444; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <img src="logo_trasparente.png" alt="La Cascina" class="logo-img">
+    <div class="tagline">BAR • CUCINA • APERITIVI</div>
+
+    <div class="links">
+        <a href="menu.html" class="btn btn-menu">📖 Sfoglia il Menù Digitale</a>
+        
+        <a href="eventi.html" class="btn btn-eventi">📅 Prossimi Eventi</a>
+
+        <a href="https://www.instagram.com/_lacascinadeicanz_/" target="_blank" class="btn btn-ig">📸 Taggaci su Instagram</a>
+        <a href="tel:0396777270" class="btn btn-outline">📞 Prenota un Tavolo</a>
+        <a href="https://maps.google.com/?q=La+Cascina+Albiate" target="_blank" class="btn btn-outline">📍 Come Raggiungerci</a>
+    </div>
+
+    <div class="footer">© 2026 La Cascina - Albiate</div>
+</div>
+
+</body>
+</html>
+

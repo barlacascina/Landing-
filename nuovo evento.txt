@@ -1,0 +1,20 @@
+        <div class="event-card">
+            <img src="foto_evento_2.jpg" class="event-img">
+            <div class="event-details">
+                <div style="color:var(--gold); font-weight:bold; text-transform:uppercase;">Inserisci Data (es. Venerdì 20 Marzo)</div>
+                <h2 style="margin:10px 0;">TITOLO DEL NUOVO EVENTO</h2>
+                <p style="color:#aaa; font-size:0.9rem; line-height:1.4;">Scrivi qui la descrizione del secondo evento.</p>
+            </div>
+        </div>
+        ```
+
+### Dove devi incollarlo esattamente?
+Apri il tuo file `eventi.html` e cerca la fine del primo evento. Incolla questo codice subito prima della chiusura del "contenitore", ovvero prima di queste righe:
+`</div> `
+`</body>`
+
+### Cosa devi cambiare una volta incollato:
+1.  **`foto_evento_2.jpg`**: Cambialo con il nome della nuova immagine che caricherai.
+2.  **Data, Titolo e Descrizione**: Scrivi i dettagli del nuovo appuntamento.
+
+Se lo fai correttamente, vedrai apparire una seconda scheda sotto la prima, con lo stesso stile elegante.
