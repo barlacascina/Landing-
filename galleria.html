@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - La Cascina</title>
+    <style>
+        :root { --gold: #d4af37; --bg: #000; }
+        body { font-family: sans-serif; background-color: var(--bg); color: #fff; margin: 0; padding: 0; scroll-behavior: smooth; }
+        
+        /* Header */
+        .header { 
+            background: #0a0a0a; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; 
+            border-bottom: 2px solid var(--gold); display: flex; align-items: center;
+        }
+        .btn-back { 
+            text-decoration: none; color: var(--gold); border: 1px solid var(--gold); 
+            padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; 
+        }
+
+        h1 { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; margin: 30px 0; }
+
+        /* Griglia */
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
+            gap: 8px; padding: 10px; 
+        }
+
+        .gallery-item {
+            display: none; /* Nascosto finché la foto non carica */
+            width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
+            border-radius: 8px; border: 1px solid #222; cursor: pointer;
+            background: #111;
+        }
+
+        .gallery-item.loaded { display: block; }
+
+        .gallery-item img { 
+            width: 100%; height: 100%; object-fit: cover; 
+            display: block; transition: transform 0.3s ease;
+        }
+
+        /* Lightbox */
+        #lightbox {
+            display: none; position: fixed; z-index: 2000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); align-items: center; justify-content: center;
+        }
+        #lightbox img { 
+            max-width: 95%; max-height: 90%; border-radius: 4px; 
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+        }
+
+        /* Tasto Torna Su */
+        #btnTop {
+            display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99;
+            background-color: var(--gold); color: black; border: none; outline: none;
+            cursor: pointer; padding: 12px 15px; border-radius: 50%; font-weight: bold;
+        }
+
+        @media (min-width: 600px) {
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="btn-back">← Home</a>
+    </div>
+
+    <h1>Gallery</h1>
+
+    <div class="gallery-grid" id="main-grid"></div>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="">
+    </div>
+
+    <button onclick="window.scrollTo(0,0)" id="btnTop" title="Torna su">↑</button>
+
+    <script>
+        const grid = document.getElementById('main-grid');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const btnTop = document.getElementById('btnTop');
+        const maxFoto = 100;
+
+        // Generazione 100 slot
+        for (let i = 1; i <= maxFoto; i++) {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            
+            const img = document.createElement('img');
+            img.src = `foto_${i}.jpg`; // Rinomina i tuoi file come foto_1.jpg, foto_2.jpg...
+            img.alt = `Gallery Item ${i}`;
+            img.loading = "lazy";
+            
+            img.onload = function() {
+                item.classList.add('loaded');
+            };
+
+            item.onclick = function() {
+                lightboxImg.src = this.querySelector('img').src;
+                lightbox.style.display = 'flex';
+            };
+            
+            item.appendChild(img);
+            grid.appendChild(item);
+        }
+
+        // Gestione tasto Torna Su
+        window.onscroll = function() {
+            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+                btnTop.style.display = "block";
+            } else {
+                btnTop.style.display = "none";
+            }
+        };
+    </script>
+
+</body>
+</html>
+

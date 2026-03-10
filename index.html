@@ -34,9 +34,18 @@
             transition: all 0.3s ease; display: block; 
         }
         
+        /* Colori dei tasti */
         .btn-menu { background: var(--gold); color: black; border: none; }
-        .btn-eventi { background: white; color: black; border: none; } /* Tasto eventi bianco per staccare */
+        .btn-eventi { background: white; color: black; border: none; }
         .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+        
+        /* Nuovo stile per il tasto Galleria Colorato */
+        .btn-gallery { 
+            background: #1a1a1a; /* Grigio molto scuro */
+            color: var(--gold); /* Testo oro */
+            border: 1px solid var(--gold); 
+        }
+        
         .btn-outline { border: 1.5px solid rgba(255,255,255,0.4); color: white; }
         
         .btn:active { transform: scale(0.97); opacity: 0.8; }
@@ -56,6 +65,9 @@
         <a href="eventi.html" class="btn btn-eventi">📅 Prossimi Eventi</a>
 
         <a href="https://www.instagram.com/_lacascinadeicanz_/" target="_blank" class="btn btn-ig">📸 Taggaci su Instagram</a>
+
+        <a href="galleria.html" class="btn btn-gallery">🖼️ Galleria Fotografica</a>
+
         <a href="tel:0396777270" class="btn btn-outline">📞 Prenota un Tavolo</a>
         <a href="https://maps.google.com/?q=La+Cascina+Albiate" target="_blank" class="btn btn-outline">📍 Come Raggiungerci</a>
     </div>
