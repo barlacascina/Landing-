@@ -3,77 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Cascina - Albiate</title>
+    <title>La Cascina - Ufficiale</title>
     <style>
-        :root { 
-            --gold: #d4af37; 
-            --bg-page: #0d0d0d; 
-        }
-        
+        /* RESET TOTALE */
+        * { box-sizing: border-box; }
         body, html { 
-            margin: 0; padding: 0; height: 100%; 
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-page); color: white; 
-            display: flex; align-items: center; justify-content: center; 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #000000; color: #ffffff; 
+            font-family: Arial, sans-serif; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
-        
-        .wrapper { width: 90%; max-width: 400px; text-align: center; }
 
-        .logo-img { width: 100%; max-width: 280px; height: auto; margin-bottom: 10px; }
+        /* SFONDO ANIMATO (Fumo semplificato) */
+        .fumo-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; background: #050505;
+        }
+
+        .nuvola {
+            position: absolute; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            animation: muoviFumo 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes muoviFumo {
+            from { transform: translate(-15%, -15%) scale(1); }
+            to { transform: translate(15%, 15%) scale(1.1); }
+        }
+
+        /* CONTENUTO CENTRALE */
+        .wrapper { 
+            position: relative; z-index: 10; 
+            width: 85%; max-width: 380px; text-align: center; 
+        }
+
+        .logo-img { width: 100%; max-width: 240px; height: auto; margin-bottom: 10px; }
         
         .tagline { 
-            color: var(--gold); font-size: 0.85rem; font-style: italic; 
-            letter-spacing: 2px; margin-bottom: 45px; opacity: 0.9;
+            color: #d4af37; font-size: 0.8rem; font-weight: bold;
+            letter-spacing: 2px; margin-bottom: 35px; text-transform: uppercase;
         }
         
-        .links { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+        .links { display: flex; flex-direction: column; gap: 14px; }
         
+        /* BOTTONI PERSONALIZZATI */
         .btn { 
-            text-decoration: none; padding: 18px; border-radius: 12px; 
-            font-weight: bold; text-transform: uppercase; font-size: 0.9rem; 
-            transition: all 0.3s ease; display: block; 
+            text-decoration: none !important; 
+            padding: 18px; 
+            border-radius: 12px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            font-size: 0.85rem; 
+            display: block;
+            text-align: center;
         }
         
-        /* Colori dei tasti */
-        .btn-menu { background: var(--gold); color: black; border: none; }
-        .btn-eventi { background: white; color: black; border: none; }
-        .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
-        
-        /* Nuovo stile per il tasto Galleria Colorato */
-        .btn-gallery { 
-            background: #1a1a1a; /* Grigio molto scuro */
-            color: var(--gold); /* Testo oro */
-            border: 1px solid var(--gold); 
-        }
-        
-        .btn-outline { border: 1.5px solid rgba(255,255,255,0.4); color: white; }
-        
-        .btn:active { transform: scale(0.97); opacity: 0.8; }
-        
-        .footer { margin-top: 50px; font-size: 0.6rem; color: #444; letter-spacing: 1px; }
+        .btn-oro { background-color: #d4af37; color: #000000; }
+        .btn-bianco { background-color: #ffffff; color: #000000; }
+        .btn-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; }
+        .btn-border { border: 2px solid #d4af37; color: #d4af37; background: rgba(0,0,0,0.6); }
+        .btn-semplice { border: 1px solid #555555; color: #ffffff; background: rgba(255,255,255,0.05); }
+
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <img src="logo_trasparente.png" alt="La Cascina" class="logo-img">
-    <div class="tagline">BAR • CUCINA • APERITIVI</div>
-
-    <div class="links">
-        <a href="menu.html" class="btn btn-menu">📖 Sfoglia il Menù Digitale</a>
-        
-        <a href="eventi.html" class="btn btn-eventi">📅 Prossimi Eventi</a>
-
-        <a href="https://www.instagram.com/_lacascinadeicanz_/" target="_blank" class="btn btn-ig">📸 Taggaci su Instagram</a>
-
-        <a href="galleria.html" class="btn btn-gallery">🖼️ Galleria Fotografica</a>
-
-        <a href="tel:0396777270" class="btn btn-outline">📞 Prenota un Tavolo</a>
-        <a href="https://maps.google.com/?q=La+Cascina+Albiate" target="_blank" class="btn btn-outline">📍 Come Raggiungerci</a>
+    <div class="fumo-bg">
+        <div class="nuvola" style="top: -10%; left: -10%;"></div>
+        <div class="nuvola" style="bottom: -10%; right: -10%; animation-delay: -5s; opacity: 0.5;"></div>
     </div>
 
-    <div class="footer">© 2026 La Cascina - Albiate</div>
-</div>
+    <div class="wrapper">
+        <img src="logo_trasparente.png" alt="La Cascina" class="logo-img">
+        <div class="tagline">Bar • Cucina • Aperitivi</div>
+
+        <div class="links">
+            <a href="menu.html" class="btn btn-oro">📖 Menù Digitale</a>
+            <a href="eventi.html" class="btn btn-bianco">📅 Prossimi Eventi</a>
+            <a href="https://www.instagram.com/_lacascinadeicanz_/" class="btn btn-insta">📸 Seguici su Instagram</a>
+            <a href="galleria.html" class="btn btn-border">🖼️ Galleria Foto</a>
+            <a href="tel:0396777270" class="btn btn-semplice">📞 Prenota Tavolo</a>
+            <a href="https://maps.google.com" class="btn btn-semplice">📍 Dove Siamo</a>
+        </div>
+    </div>
 
 </body>
 </html>
