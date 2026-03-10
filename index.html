@@ -2,90 +2,121 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Cascina - Ufficiale</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="logo_trasparente.png?v=4">
+    <link rel="apple-touch-icon" href="logo_trasparente.png?v=4">
+    <title>LA CASCINA - Albiate</title>
     <style>
-        /* RESET TOTALE */
-        * { box-sizing: border-box; }
-        body, html { 
+        /* RESET E BASE */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #000000; color: #ffffff; 
-            font-family: Arial, sans-serif; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
+            background-color: #000; color: #fff; 
+            font-family: -apple-system, Helvetica, Arial, sans-serif;
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
         }
 
-        /* SFONDO ANIMATO (Fumo semplificato) */
-        .fumo-bg {
+        /* --- EFFETTO FUMO ATMOSFERICO --- */
+        .smoke-wrap {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1; background: #050505;
+            z-index: 1; background: #050505; overflow: hidden;
         }
 
-        .nuvola {
-            position: absolute; width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(212,175,55,0.2) 0%, rgba(0,0,0,0) 70%);
+        .smoke-cloud {
+            position: absolute;
+            width: 150vw; height: 150vw;
             border-radius: 50%;
-            animation: muoviFumo 15s infinite alternate ease-in-out;
+            /* Fumo Oro */
+            background: radial-gradient(circle, rgba(212,175,55,0.18) 0%, rgba(0,0,0,0) 70%);
+            top: -20%; left: -30%;
+            filter: blur(60px);
+            -webkit-filter: blur(60px);
+            animation: moveSmoke 22s infinite alternate ease-in-out;
+            transform: translateZ(0);
         }
 
-        @keyframes muoviFumo {
-            from { transform: translate(-15%, -15%) scale(1); }
-            to { transform: translate(15%, 15%) scale(1.1); }
+        .smoke-cloud-2 {
+            position: absolute;
+            width: 140vw; height: 140vw;
+            border-radius: 50%;
+            /* Fumo Bianco/Grigio */
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0) 70%);
+            bottom: -30%; right: -20%;
+            filter: blur(80px);
+            -webkit-filter: blur(80px);
+            animation: moveSmoke 18s infinite alternate-reverse ease-in-out;
+            transform: translateZ(0);
         }
 
-        /* CONTENUTO CENTRALE */
-        .wrapper { 
-            position: relative; z-index: 10; 
-            width: 85%; max-width: 380px; text-align: center; 
+        @keyframes moveSmoke {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(15%, 10%) scale(1.1); }
         }
 
-        .logo-img { width: 100%; max-width: 240px; height: auto; margin-bottom: 10px; }
-        
-        .tagline { 
-            color: #d4af37; font-size: 0.8rem; font-weight: bold;
-            letter-spacing: 2px; margin-bottom: 35px; text-transform: uppercase;
-        }
-        
-        .links { display: flex; flex-direction: column; gap: 14px; }
-        
-        /* BOTTONI PERSONALIZZATI */
-        .btn { 
-            text-decoration: none !important; 
-            padding: 18px; 
-            border-radius: 12px; 
-            font-weight: bold; 
-            text-transform: uppercase; 
-            font-size: 0.85rem; 
-            display: block;
+        /* --- CONTENUTO SOPRA IL FUMO --- */
+        .content {
+            position: relative; z-index: 10;
+            width: 90%; max-width: 360px;
             text-align: center;
         }
-        
-        .btn-oro { background-color: #d4af37; color: #000000; }
-        .btn-bianco { background-color: #ffffff; color: #000000; }
-        .btn-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; }
-        .btn-border { border: 2px solid #d4af37; color: #d4af37; background: rgba(0,0,0,0.6); }
-        .btn-semplice { border: 1px solid #555555; color: #ffffff; background: rgba(255,255,255,0.05); }
+
+        .logo-box img {
+            width: 100%; max-width: 240px; height: auto;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+        }
+
+        .tagline {
+            color: #d4af37; font-size: 0.75rem; letter-spacing: 3px;
+            text-transform: uppercase; font-weight: bold; margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        /* --- BOTTONI --- */
+        .btn-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .btn {
+            display: block; width: 100%; padding: 18px;
+            text-decoration: none; border-radius: 12px;
+            font-size: 0.85rem; font-weight: bold; text-transform: uppercase;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .btn-gold { background: #d4af37; color: #000; }
+        .btn-white { background: #fff; color: #000; }
+        .btn-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
+        .btn-gallery { border: 2.5px solid #d4af37; color: #d4af37; background: rgba(0,0,0,0.4); }
+        .btn-outline { border: 1px solid rgba(255,255,255,0.3); color: #fff; background: rgba(255,255,255,0.05); }
+
+        .btn:active { transform: scale(0.96); opacity: 0.9; }
+
+        .footer { margin-top: 40px; font-size: 0.6rem; color: #444; letter-spacing: 1px; }
 
     </style>
 </head>
 <body>
 
-    <div class="fumo-bg">
-        <div class="nuvola" style="top: -10%; left: -10%;"></div>
-        <div class="nuvola" style="bottom: -10%; right: -10%; animation-delay: -5s; opacity: 0.5;"></div>
+    <div class="smoke-wrap">
+        <div class="smoke-cloud"></div>
+        <div class="smoke-cloud-2"></div>
     </div>
 
-    <div class="wrapper">
-        <img src="logo_trasparente.png" alt="La Cascina" class="logo-img">
+    <div class="content">
+        <div class="logo-box">
+            <img src="logo_trasparente.png" alt="La Cascina Logo">
+        </div>
         <div class="tagline">Bar • Cucina • Aperitivi</div>
 
-        <div class="links">
-            <a href="menu.html" class="btn btn-oro">📖 Menù Digitale</a>
-            <a href="eventi.html" class="btn btn-bianco">📅 Prossimi Eventi</a>
-            <a href="https://www.instagram.com/_lacascinadeicanz_/" class="btn btn-insta">📸 Seguici su Instagram</a>
-            <a href="galleria.html" class="btn btn-border">🖼️ Galleria Foto</a>
-            <a href="tel:0396777270" class="btn btn-semplice">📞 Prenota Tavolo</a>
-            <a href="https://maps.google.com" class="btn btn-semplice">📍 Dove Siamo</a>
+        <div class="btn-list">
+            <a href="menu.html" class="btn btn-gold">📖 Sfoglia il Menù</a>
+            <a href="eventi.html" class="btn btn-white">📅 Prossimi Eventi</a>
+            <a href="https://www.instagram.com/_lacascinadeicanz_/" target="_blank" class="btn btn-insta">📸 Seguici su Instagram</a>
+            <a href="galleria.html" class="btn btn-gallery">🖼️ Galleria Fotografica</a>
+            <a href="tel:0396777270" class="btn btn-outline">📞 Prenota un Tavolo</a>
+            <a href="https://maps.google.com/?q=La+Cascina+Albiate" target="_blank" class="btn btn-outline">📍 Dove Siamo</a>
         </div>
+
+        <div class="footer">© 2026 LA CASCINA - ALBIATE</div>
     </div>
 
 </body>
