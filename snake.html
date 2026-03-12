@@ -12,16 +12,34 @@
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; min-height: 100vh; margin: 0; overflow: hidden;
         }
+        .game-container { position: relative; }
         canvas {
             border: 3px solid #d4af37;
             background-color: #000;
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
             max-width: 85vw; height: auto;
+            display: block;
         }
+        /* Overlay per lo Start */
+        #overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 10;
+        }
+        #startBtn {
+            background: #d4af37; color: #000;
+            border: none; padding: 15px 30px;
+            font-size: 20px; font-weight: bold;
+            font-family: inherit; cursor: pointer;
+            border-radius: 5px; text-transform: uppercase;
+        }
+
         .ui { margin-bottom: 10px; text-align: center; }
         .score { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
 
-        /* CONTROLLI A BOTTONI */
         .controls {
             margin-top: 20px;
             display: grid;
@@ -60,7 +78,12 @@
         <div class="score">SCORE: <span id="scoreVal">0</span></div>
     </div>
 
-    <canvas id="gameCanvas" width="300" height="300"></canvas>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="300" height="300"></canvas>
+        <div id="overlay">
+            <button id="startBtn" onclick="startGame()">Start Game</button>
+        </div>
+    </div>
 
     <div class="controls">
         <div class="btn-ctrl up" onclick="changeDir('UP')">▲</div>
@@ -75,22 +98,38 @@
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const scoreElement = document.getElementById("scoreVal");
+        const overlay = document.getElementById("overlay");
+        const startBtn = document.getElementById("startBtn");
 
-        let score = 0;
-        let gridSize = 20;
-        let snake = [{x: 160, y: 160}, {x: 140, y: 160}, {x: 120, y: 160}];
-        let dx = 20;
-        let dy = 0;
-        let foodX, foodY;
-        let changingDirection = false;
+        let score, gridSize, snake, dx, dy, foodX, foodY, changingDirection;
+        let gameActive = false;
 
-        main();
-        createFood();
+        // Inizializza i valori ma non far partire il loop
+        function resetGame() {
+            score = 0;
+            gridSize = 20;
+            snake = [{x: 160, y: 160}, {x: 140, y: 160}, {x: 120, y: 160}];
+            dx = 20;
+            dy = 0;
+            scoreElement.innerHTML = score;
+            createFood();
+        }
+
+        function startGame() {
+            resetGame();
+            gameActive = true;
+            overlay.style.display = "none";
+            main();
+        }
 
         function main() {
+            if (!gameActive) return;
+
             if (didGameEnd()) {
+                gameActive = false;
                 alert("GAME OVER!\nPunteggio: " + score + "\nFai uno screenshot se è un record!");
-                document.location.reload();
+                overlay.style.display = "flex";
+                startBtn.innerHTML = "Riprova";
                 return;
             }
 
@@ -147,15 +186,17 @@
             ctx.fillRect(foodX, foodY, gridSize - 2, gridSize - 2);
         }
 
-        // FUNZIONE PER I BOTTONI
         function changeDir(dir) {
-            if (changingDirection) return;
+            if (changingDirection || !gameActive) return;
             changingDirection = true;
             if (dir === 'UP' && dy === 0) { dx = 0; dy = -20; }
             if (dir === 'DOWN' && dy === 0) { dx = 0; dy = 20; }
             if (dir === 'LEFT' && dx === 0) { dx = -20; dy = 0; }
             if (dir === 'RIGHT' && dx === 0) { dx = 20; dy = 0; }
         }
+
+        // Primo disegno per non avere il canvas vuoto
+        clearCanvas();
     </script>
 </body>
 </html>
