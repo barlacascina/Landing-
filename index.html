@@ -1,80 +1,114 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Cascina - Albiate</title>
-    <style>
-        :root { 
-            --gold: #d4af37; 
-            --bg-page: #0d0d0d; 
-        }
-        
-        body, html { 
-            margin: 0; padding: 0; height: 100%; 
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-page); color: white; 
-            display: flex; align-items: center; justify-content: center; 
-        }
-        
-        .wrapper { width: 90%; max-width: 400px; text-align: center; }
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-        .logo-img { width: 100%; max-width: 280px; height: auto; margin-bottom: 10px; }
-        
-        .tagline { 
-            color: var(--gold); font-size: 0.85rem; font-style: italic; 
-            letter-spacing: 2px; margin-bottom: 45px; opacity: 0.9;
+  gtag('config', 'G-8GSRKJ2EC8');
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>La Cascina Albiate - Menù Digitale, Eventi & Arcade</title>
+    <meta name="description" content="Benvenuti a La Cascina di Albiate. Sfoglia il nostro menù, scopri gli eventi, gioca a Snake e scala la Hall of Fame. Il tuo locale ad Albiate tra food, drink e divertimento.">
+    <meta name="keywords" content="La Cascina Albiate, Bar Albiate, Aperitivo Albiate, Menù Digitale Albiate, Cocktail Bar Brianza, Snake Arcade Bar">
+    <meta name="author" content="La Cascina">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="La Cascina Albiate - Esperienza Digitale">
+    <meta property="og:description" content="Menù, Giochi Arcade e molto altro. Inquadra e divertiti!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://TUO-USERNAME.github.io/"> <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #050505; color: #fff; 
+            font-family: 'Courier New', Courier, monospace;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative; z-index: 10;
+            width: 90%; max-width: 360px; text-align: center;
+        }
+
+        .logo-box img { width: 160px; margin-bottom: 20px; filter: drop-shadow(0 0 10px #d4af37); }
+
+        .btn-list { display: flex; flex-direction: column; gap: 14px; }
+
+        .btn {
+            text-decoration: none; padding: 18px; border-radius: 10px;
+            font-weight: bold; font-size: 0.9rem; text-transform: uppercase;
+            letter-spacing: 2px; display: block; transition: 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .btn-play { 
+            background: #2ecc71; color: #000; 
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+            animation: pulse 1.5s infinite;
         }
         
-        .links { display: flex; flex-direction: column; gap: 16px; width: 100%; }
-        
-        .btn { 
-            text-decoration: none; padding: 18px; border-radius: 12px; 
-            font-weight: bold; text-transform: uppercase; font-size: 0.9rem; 
-            transition: all 0.3s ease; display: block; 
-        }
-        
-        /* Colori dei tasti */
-        .btn-menu { background: var(--gold); color: black; border: none; }
-        .btn-eventi { background: white; color: black; border: none; }
-        .btn-ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
-        
-        /* Nuovo stile per il tasto Galleria Colorato */
         .btn-gallery { 
-            background: #1a1a1a; /* Grigio molto scuro */
-            color: var(--gold); /* Testo oro */
-            border: 1px solid var(--gold); 
+            background: #e67e22; color: #fff; 
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.4);
         }
-        
-        .btn-outline { border: 1.5px solid rgba(255,255,255,0.4); color: white; }
-        
-        .btn:active { transform: scale(0.97); opacity: 0.8; }
-        
-        .footer { margin-top: 50px; font-size: 0.6rem; color: #444; letter-spacing: 1px; }
+
+        .btn-menu { background: #d4af37; color: #000; }
+        .btn-insta { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
+        .btn-outline { border: 2px solid rgba(212, 175, 55, 0.5); color: #d4af37; background: rgba(0,0,0,0.5); }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+
+        .footer { margin-top: 40px; font-size: 0.7rem; color: #555; letter-spacing: 2px; }
     </style>
+</head>
+
 </head>
 <body>
 
-<div class="wrapper">
-    <img src="logo_trasparente.png" alt="La Cascina" class="logo-img">
-    <div class="tagline">BAR • CUCINA • APERITIVI</div>
+    <div class="container">
+        <div class="logo-box">
+            <img src="logo_trasparente.png" alt="Logo">
+        </div>
 
-    <div class="links">
-        <a href="menu.html" class="btn btn-menu">📖 Sfoglia il Menù Digitale</a>
-        
-        <a href="eventi.html" class="btn btn-eventi">📅 Prossimi Eventi</a>
+        <div class="btn-list">
+            <a href="snake.html" class="btn btn-play">🎮 GIOCA A SNAKE (Retro)</a>
+            <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-gallery">📸 LA VOSTRA GALLERIA</a>
+            
+            <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 10px 0;"></div>
+            
+            <a href="menu.html" class="btn btn-menu">📖 Sfoglia il Menù</a>
+            <a href="javascript:void(0)" onclick="openInstagram()" class="btn btn-insta">📸Taggaci Instagram</a>
+            <a href="tel:0396777270" class="btn btn-outline">📞 Prenota Tavolo</a>
 
-        <a href="https://www.instagram.com/_lacascinadeicanz_/" target="_blank" class="btn btn-ig">📸 Taggaci su Instagram</a>
+            <div style="margin-top: 30px;"> 
+                <a href="classifica.html" class="btn" 
+                   style="border: 1px dashed #d4af37; color: #d4af37; background: transparent; font-size: 0.7rem;">
+                   🏆 Hall of Fame dei Record
+Snake
+                </a>
+            </div>
+        </div>
 
-        <a href="galleria.html" class="btn btn-gallery">🖼️ Galleria Fotografica</a>
-
-        <a href="tel:0396777270" class="btn btn-outline">📞 Prenota un Tavolo</a>
-        <a href="https://maps.google.com/?q=La+Cascina+Albiate" target="_blank" class="btn btn-outline">📍 Come Raggiungerci</a>
+        <div class="footer">CASCINA ARCADE • EST. 2026</div>
     </div>
 
-    <div class="footer">© 2026 La Cascina - Albiate</div>
-</div>
-
+    <script>
+        function openInstagram() {
+            window.location.href = "instagram://story-camera";
+            setTimeout(function() { window.location.href = "https://www.instagram.com/_lacascinadeicanz_/"; }, 600);
+        }
+    </script>
 </body>
 </html>
 
