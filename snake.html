@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SNAKE - La Cascina</title>
     <style>
+        * { box-sizing: border-box; touch-action: none; -webkit-tap-highlight-color: transparent; }
+        
         body {
             background-color: #050505;
             color: #d4af37;
@@ -17,162 +19,163 @@
             justify-content: center;
             height: 100vh;
             overflow: hidden;
-            touch-action: none;
         }
 
-        #game-container { position: relative; border: 3px solid #d4af37; background-color: #000; }
-        canvas { display: block; background-color: #000; }
+        .info { margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; letter-spacing: 1px; color: #d4af37; }
 
-        .info { margin-bottom: 10px; font-size: 1.2rem; font-weight: bold; }
+        #game-container { 
+            border: 3px solid #d4af37; 
+            background-color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            line-height: 0;
+        }
         
+        canvas { display: block; background-color: #000; }
+        
+        /* CONTROLLI */
         .controls {
-            margin-top: 20px;
+            margin-top: 30px;
             display: grid;
-            grid-template-columns: repeat(3, 60px);
-            grid-template-rows: repeat(2, 60px);
-            gap: 10px;
+            grid-template-columns: repeat(3, 80px);
+            grid-template-rows: repeat(2, 80px);
+            gap: 15px;
             justify-content: center;
         }
 
         .btn {
-            width: 60px;
-            height: 60px;
-            background: rgba(212, 175, 55, 0.2);
-            border: 1px solid #d4af37;
+            width: 80px;
+            height: 80px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
             color: #d4af37;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 15px;
             user-select: none;
         }
 
         .btn:active { background: #d4af37; color: #000; }
+        
         .up { grid-column: 2; }
         .left { grid-column: 1; grid-row: 2; }
         .down { grid-column: 2; grid-row: 2; }
         .right { grid-column: 3; grid-row: 2; }
 
         .back-btn {
-            margin-top: 20px;
+            margin-top: 25px;
             text-decoration: none;
             color: #d4af37;
-            font-size: 0.8rem;
-            border: 1px solid #d4af37;
-            padding: 5px 15px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 10px 20px;
             border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="info">PUNTI: <span id="scoreVal">0</span></div>
+    <div class="info">👾 <span id="p-name">GUEST</span>: <span id="p-score">0</span></div>
 
     <div id="game-container">
-        <canvas id="snakeGame" width="300" height="300"></canvas>
+        <canvas id="snakeGame"></canvas>
     </div>
 
     <div class="controls">
-        <div class="btn up" onclick="changeDir('UP')">▲</div>
-        <div class="btn left" onclick="changeDir('LEFT')">◀</div>
-        <div class="btn down" onclick="changeDir('DOWN')">▼</div>
-        <div class="btn right" onclick="changeDir('RIGHT')">▶</div>
+        <div class="btn up" id="ctrl-up">▲</div>
+        <div class="btn left" id="ctrl-left">◀</div>
+        <div class="btn down" id="ctrl-down">▼</div>
+        <div class="btn right" id="ctrl-right">▶</div>
     </div>
 
-    <a href="index.html" class="back-btn">Torna alla Home</a>
+    <a href="index.html" class="back-btn">Esci</a>
 
     <script>
         const canvas = document.getElementById("snakeGame");
         const ctx = canvas.getContext("2d");
-        const scoreElement = document.getElementById("scoreVal");
-
+        
         const box = 20;
-        let snake = [{ x: 140, y: 140 }];
-        let food = {
-            x: Math.floor(Math.random() * 15) * box,
-            y: Math.floor(Math.random() * 15) * box
-        };
-        let d = "RIGHT";
+        const canvasSize = Math.floor((window.innerWidth * 0.9) / box) * box;
+        canvas.width = Math.min(canvasSize, 320);
+        canvas.height = canvas.width;
+
         let score = 0;
-        let gameActive = true;
+        let snake = [
+            { x: 5 * box, y: 7 * box },
+            { x: 4 * box, y: 7 * box }
+        ];
+        
+        let food = getRandomFood();
+        let d = "RIGHT";
+        let nextD = "RIGHT";
 
-        // Recupero nome utente
-        const userName = localStorage.getItem('cascina_user') || "GUEST";
+        const user = localStorage.getItem('cascina_user') || "GUEST";
+        document.getElementById("p-name").innerText = user.toUpperCase();
 
-        document.addEventListener("keydown", direction);
-
-        function direction(event) {
-            if (event.keyCode == 37 && d != "RIGHT") d = "LEFT";
-            else if (event.keyCode == 38 && d != "DOWN") d = "UP";
-            else if (event.keyCode == 39 && d != "LEFT") d = "RIGHT";
-            else if (event.keyCode == 40 && d != "UP") d = "DOWN";
+        function getRandomFood() {
+            let newFood;
+            while (!newFood || snake.some(s => s.x === newFood.x && s.y === newFood.y)) {
+                newFood = {
+                    x: Math.floor(Math.random() * (canvas.width / box)) * box,
+                    y: Math.floor(Math.random() * (canvas.height / box)) * box
+                };
+            }
+            return newFood;
         }
 
-        function changeDir(newDir) {
-            if (newDir == "LEFT" && d != "RIGHT") d = "LEFT";
-            if (newDir == "UP" && d != "DOWN") d = "UP";
-            if (newDir == "RIGHT" && d != "LEFT") d = "RIGHT";
-            if (newDir == "DOWN" && d != "UP") d = "DOWN";
+        function setDir(newDir) {
+            if (newDir === "UP" && d !== "DOWN") nextD = "UP";
+            if (newDir === "DOWN" && d !== "UP") nextD = "DOWN";
+            if (newDir === "LEFT" && d !== "RIGHT") nextD = "LEFT";
+            if (newDir === "RIGHT" && d !== "LEFT") nextD = "RIGHT";
         }
 
-        function saveRecord(finalScore) {
-            let records = JSON.parse(localStorage.getItem('snake_records')) || [];
-            
-            // Aggiungiamo il nuovo record
-            records.push({ name: userName, score: finalScore });
-
-            // Ordiniamo e teniamo solo i migliori 50 per non appesantire il telefono
-            records.sort((a, b) => b.score - a.score);
-            records = records.slice(0, 50);
-
-            localStorage.setItem('snake_records', JSON.stringify(records));
-        }
+        const btns = { "ctrl-up": "UP", "ctrl-down": "DOWN", "ctrl-left": "LEFT", "ctrl-right": "RIGHT" };
+        Object.keys(btns).forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener("touchstart", (e) => { e.preventDefault(); setDir(btns[id]); }, {passive: false});
+            el.addEventListener("mousedown", (e) => { e.preventDefault(); setDir(btns[id]); });
+        });
 
         function draw() {
-            if (!gameActive) return;
-
-            ctx.fillStyle = "black";
+            ctx.fillStyle = "#000";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            for (let i = 0; i < snake.length; i++) {
-                ctx.fillStyle = (i == 0) ? "#d4af37" : "#886d1d";
-                ctx.fillRect(snake[i].x, snake[i].y, box, box);
-                ctx.strokeStyle = "black";
-                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
-            }
-
+            // Cibo
             ctx.fillStyle = "#2ecc71";
-            ctx.fillRect(food.x, food.y, box, box);
+            ctx.fillRect(food.x + 1, food.y + 1, box - 2, box - 2);
+
+            // Serpente
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = (i === 0) ? "#d4af37" : "rgba(212, 175, 55, 0.6)";
+                ctx.fillRect(snake[i].x + 1, snake[i].y + 1, box - 2, box - 2);
+            }
 
             let snakeX = snake[0].x;
             let snakeY = snake[0].y;
 
-            if (d == "LEFT") snakeX -= box;
-            if (d == "UP") snakeY -= box;
-            if (d == "RIGHT") snakeX += box;
-            if (d == "DOWN") snakeY += box;
+            d = nextD;
+            if (d === "LEFT") snakeX -= box;
+            if (d === "UP") snakeY -= box;
+            if (d === "RIGHT") snakeX += box;
+            if (d === "DOWN") snakeY += box;
 
-            // Mangia cibo
-            if (snakeX == food.x && snakeY == food.y) {
+            if (snakeX === food.x && snakeY === food.y) {
                 score++;
-                scoreElement.innerHTML = score;
-                food = {
-                    x: Math.floor(Math.random() * 15) * box,
-                    y: Math.floor(Math.random() * 15) * box
-                };
+                document.getElementById("p-score").innerText = score;
+                food = getRandomFood();
             } else {
                 snake.pop();
             }
 
             let newHead = { x: snakeX, y: snakeY };
 
-            // Game Over
             if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
-                gameActive = false;
-                saveRecord(score);
-                alert("GAME OVER! Punti: " + score);
-                location.href = "classifica.html"; // Vai alla classifica
+                clearInterval(game);
+                saveAndFinish(score);
                 return;
             }
 
@@ -181,12 +184,30 @@
 
         function collision(head, array) {
             for (let i = 0; i < array.length; i++) {
-                if (head.x == array[i].x && head.y == array[i].y) return true;
+                if (head.x === array[i].x && head.y === array[i].y) return true;
             }
             return false;
         }
 
-        let game = setInterval(draw, 150);
+        function saveAndFinish(s) {
+            // Salvataggio nel database locale 'snake_records'
+            let records = JSON.parse(localStorage.getItem('snake_records') || "[]");
+            records.push({ 
+                name: user, 
+                score: s, 
+                date: new Date().toLocaleDateString() 
+            });
+            
+            // Ordina e tieni i migliori 50
+            records.sort((a, b) => b.score - a.score);
+            localStorage.setItem('snake_records', JSON.stringify(records.slice(0, 50)));
+
+            // Messaggio e reindirizzamento alla classifica
+            alert("GAME OVER! Punti: " + s);
+            window.location.href = "classifica.html";
+        }
+
+        let game = setInterval(draw, 115);
     </script>
 </body>
 </html>
