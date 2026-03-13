@@ -79,6 +79,11 @@
         <div class="logo-box">
             <img src="logo_trasparente.png" alt="Logo">
         </div>
+<div id="welcome-section" style="margin-bottom: 20px; min-height: 30px;">
+    <p id="welcome-text" style="color: #d4af37; font-size: 0.9rem; letter-spacing: 1px; margin: 0;"></p>
+    <span id="change-name" onclick="askName()" style="color: #555; font-size: 0.6rem; text-decoration: underline; cursor: pointer; display: none;">Cambia Nickname</span>
+</div>
+
 
         <div class="btn-list">
             <a href="snake.html" class="btn btn-play">🎮 GIOCA A SNAKE (Retro)</a>
@@ -104,6 +109,36 @@ Snake
     </div>
 
     <script>
+// Funzione per gestire il nome dell'utente
+function checkUser() {
+    const userName = localStorage.getItem('cascina_user');
+    const welcomeText = document.getElementById('welcome-text');
+    const changeLink = document.getElementById('change-name');
+
+    if (userName) {
+        welcomeText.innerHTML = "CIAO " + userName.toUpperCase() + ", BENTORNATO!";
+        changeLink.style.display = "inline";
+    } else {
+        welcomeText.innerHTML = "BENVENUTO ALLA CASCINA";
+        // Opzionale: chiedi il nome dopo 2 secondi la prima volta
+        setTimeout(askName, 2000);
+    }
+}
+
+function askName() {
+    let name = prompt("Benvenuto! Inserisci il tuo Nickname per la Hall of Fame:");
+    if (name && name.trim() !== "") {
+        localStorage.setItem('cascina_user', name.trim());
+        checkUser();
+    }
+}
+
+// Avvia il controllo al caricamento della pagina
+window.onload = function() {
+    checkUser();
+    // Se hai altre funzioni da avviare all'onload, aggiungile qui
+};
+
         function openInstagram() {
             window.location.href = "instagram://story-camera";
             setTimeout(function() { window.location.href = "https://www.instagram.com/_lacascinadeicanz_/"; }, 600);

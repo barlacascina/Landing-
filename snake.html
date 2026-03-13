@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8GSRKJ2EC8');
+    </script>
 
-  gtag('config', 'G-8GSRKJ2EC8');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CASCINA SNAKE</title>
+    <title>SNAKE - La Cascina</title>
     <style>
         body {
             background-color: #050505;
@@ -20,55 +19,65 @@
             font-family: 'Courier New', Courier, monospace;
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; min-height: 100vh; margin: 0; overflow: hidden;
+            touch-action: none;
         }
+
+        .ui { margin-bottom: 10px; text-align: center; width: 100%; }
+        #player-display { font-size: 14px; opacity: 0.8; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
+        .score { font-size: 26px; font-weight: bold; letter-spacing: 2px; }
+
         .game-container { position: relative; }
+        
         canvas {
             border: 3px solid #d4af37;
             background-color: #000;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
             max-width: 85vw; height: auto;
             display: block;
         }
-        /* Overlay per lo Start */
+
+        /* Schermata Iniziale e Game Over */
         #overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             z-index: 10;
         }
+
         #startBtn {
             background: #d4af37; color: #000;
-            border: none; padding: 15px 30px;
-            font-size: 20px; font-weight: bold;
+            border: none; padding: 18px 40px;
+            font-size: 22px; font-weight: bold;
             font-family: inherit; cursor: pointer;
-            border-radius: 5px; text-transform: uppercase;
+            border-radius: 8px; text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
         }
 
-        .ui { margin-bottom: 10px; text-align: center; }
-        .score { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
-
+        /* Griglia Controlli */
         .controls {
-            margin-top: 20px;
+            margin-top: 25px;
             display: grid;
-            grid-template-columns: repeat(3, 70px);
-            grid-template-rows: repeat(2, 70px);
-            gap: 10px;
+            grid-template-columns: repeat(3, 75px);
+            grid-template-rows: repeat(2, 75px);
+            gap: 12px;
             justify-content: center;
         }
+
         .btn-ctrl {
-            width: 70px; height: 70px;
+            width: 75px; height: 75px;
             background: rgba(212, 175, 55, 0.1);
             border: 2px solid #d4af37;
             color: #d4af37;
             border-radius: 50%;
-            font-size: 24px;
+            font-size: 28px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
+
         .btn-ctrl:active { background: #d4af37; color: #000; }
         .up { grid-column: 2; }
         .left { grid-column: 1; grid-row: 2; }
@@ -76,21 +85,22 @@
         .right { grid-column: 3; grid-row: 2; }
 
         .back-btn {
-            margin-top: 25px; text-decoration: none; color: #888;
-            font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+            margin-top: 30px; text-decoration: none; color: #555;
+            font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
     <div class="ui">
+        <div id="player-display">PILOTA: CARICAMENTO...</div>
         <div class="score">SCORE: <span id="scoreVal">0</span></div>
     </div>
 
     <div class="game-container">
         <canvas id="gameCanvas" width="300" height="300"></canvas>
         <div id="overlay">
-            <button id="startBtn" onclick="startGame()">Start Game</button>
+            <button id="startBtn" onclick="startGame()">START</button>
         </div>
     </div>
 
@@ -109,12 +119,17 @@
         const scoreElement = document.getElementById("scoreVal");
         const overlay = document.getElementById("overlay");
         const startBtn = document.getElementById("startBtn");
+        const playerDisplay = document.getElementById("player-display");
+
+        // Gestione Nome Utente
+        const playerName = localStorage.getItem('cascina_user') || "GUEST";
+        playerDisplay.innerHTML = "PILOTA: " + playerName.toUpperCase();
 
         let score, gridSize, snake, dx, dy, foodX, foodY, changingDirection;
         let gameActive = false;
+        let gameSpeed = 140;
 
-        // Inizializza i valori ma non far partire il loop
-        function resetGame() {
+        function resetVariables() {
             score = 0;
             gridSize = 20;
             snake = [{x: 160, y: 160}, {x: 140, y: 160}, {x: 120, y: 160}];
@@ -125,7 +140,7 @@
         }
 
         function startGame() {
-            resetGame();
+            resetVariables();
             gameActive = true;
             overlay.style.display = "none";
             main();
@@ -136,9 +151,9 @@
 
             if (didGameEnd()) {
                 gameActive = false;
-                alert("GAME OVER!\nPunteggio: " + score + "\nFai uno screenshot se è un record!");
+                alert("GAME OVER " + playerName.toUpperCase() + "!\nPunteggio: " + score + "\n\nFai uno screenshot se è il tuo record!");
                 overlay.style.display = "flex";
-                startBtn.innerHTML = "Riprova";
+                startBtn.innerHTML = "RIGIOCA";
                 return;
             }
 
@@ -149,7 +164,7 @@
                 advanceSnake();
                 drawSnake();
                 main();
-            }, 140);
+            }, gameSpeed);
         }
 
         function clearCanvas() {
@@ -159,6 +174,7 @@
 
         function drawSnake() {
             snake.forEach((part, index) => {
+                // Testa oro, corpo sfumato
                 ctx.fillStyle = (index === 0) ? "#d4af37" : "rgba(212, 175, 55, 0.4)";
                 ctx.fillRect(part.x, part.y, gridSize - 2, gridSize - 2);
             });
@@ -180,8 +196,11 @@
             for (let i = 4; i < snake.length; i++) {
                 if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
             }
-            return snake[0].x < 0 || snake[0].x > canvas.width - gridSize || 
-                   snake[0].y < 0 || snake[0].y > canvas.height - gridSize;
+            const hitLeftWall = snake[0].x < 0;
+            const hitRightWall = snake[0].x > canvas.width - gridSize;
+            const hitTopWall = snake[0].y < 0;
+            const hitBottomWall = snake[0].y > canvas.height - gridSize;
+            return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
         }
 
         function createFood() {
@@ -191,7 +210,7 @@
         }
 
         function drawFood() {
-            ctx.fillStyle = "#ff4757";
+            ctx.fillStyle = "#ff4757"; // Rosso per il cibo
             ctx.fillRect(foodX, foodY, gridSize - 2, gridSize - 2);
         }
 
@@ -204,7 +223,14 @@
             if (dir === 'RIGHT' && dx === 0) { dx = 20; dy = 0; }
         }
 
-        // Primo disegno per non avere il canvas vuoto
+        // Supporto tastiera per test da PC
+        document.addEventListener("keydown", (e) => {
+            if (e.keyCode === 37) changeDir('LEFT');
+            if (e.keyCode === 38) changeDir('UP');
+            if (e.keyCode === 39) changeDir('RIGHT');
+            if (e.keyCode === 40) changeDir('DOWN');
+        });
+
         clearCanvas();
     </script>
 </body>
