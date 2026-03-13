@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WiFi - La Cascina</title>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            margin: 0; padding: 0; 
+            background-color: #050505; color: #fff; 
+            font-family: 'Courier New', Courier, monospace;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%; max-width: 360px; 
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #9b59b6; /* Viola coordinato al tasto home */
+            border-radius: 20px;
+            background: rgba(155, 89, 182, 0.05);
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
+        }
+
+        h1 { color: #9b59b6; letter-spacing: 3px; font-size: 1.8rem; margin-bottom: 10px; }
+        p { color: #888; font-size: 0.9rem; margin-bottom: 25px; }
+
+        .qr-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .qr-box img {
+            width: 200px;
+            height: 200px;
+            display: block;
+        }
+
+        .info-box {
+            text-align: left;
+            background: #111;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed #444;
+            margin-bottom: 25px;
+        }
+
+        .info-line { margin-bottom: 8px; font-size: 0.8rem; }
+        .label { color: #9b59b6; font-weight: bold; }
+        .value { color: #fff; float: right; }
+
+        .btn-back {
+            text-decoration: none;
+            padding: 15px;
+            background: #444;
+            color: #fff;
+            border-radius: 10px;
+            display: block;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .btn-back:active { background: #666; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>CONNETTITI</h1>
+        <p>Inquadra il QR Code per accedere alla rete della Cascina</p>
+
+        <div class="qr-box">
+            <img src="wifi.png" alt="Inquadra il QR">
+        </div>
+
+        <div class="info-box">
+            <div class="info-line">
+                <span class="label">RETE:</span> 
+                <span class="value">LaCascina-Guest</span>
+            </div>
+            <div class="info-line">
+                <span class="label">PASSWORD:</span> 
+                <span class="value">12guest34</span>
+            </div>
+        </div>
+
+        <a href="index.html" class="btn-back">⬅ TORNA ALLA HOME</a>
+    </div>
+
+</body>
+</html>
+

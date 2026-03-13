@@ -32,8 +32,8 @@
         .name { text-align: left; }
         .score { text-align: right; color: #2ecc71; font-weight: bold; }
 
-        .back-btn {
-            margin-top: 30px;
+        .back-btn, .reset-btn {
+            margin-top: 20px;
             display: inline-block;
             text-decoration: none;
             color: #d4af37;
@@ -42,11 +42,18 @@
             border-radius: 5px;
             text-transform: uppercase;
             font-size: 0.8rem;
+            cursor: pointer;
+            background: none;
         }
-        
-        .empty-msg { color: #888; font-style: italic; margin-top: 20px; }
 
-        /* Effetto Admin */
+        .reset-btn {
+            display: none; /* Nascosto di default */
+            color: #ff4444;
+            border-color: #ff4444;
+            margin-left: 10px;
+        }
+
+        .empty-msg { color: #888; font-style: italic; margin-top: 20px; }
         .admin-row { background: rgba(212, 175, 55, 0.1); }
     </style>
 </head>
@@ -64,45 +71,50 @@
                     <th style="text-align: right;">PUNTI</th>
                 </tr>
             </thead>
-            <tbody id="leaderboard-body">
-                </tbody>
+            <tbody id="leaderboard-body"></tbody>
         </table>
         <div id="no-records" class="empty-msg" style="display:none;">Ancora nessun record. Sii il primo!</div>
     </div>
 
-    <a href="index.html" class="back-btn">Torna alla Home</a>
+    <div style="display: flex; justify-content: center; gap: 10px;">
+        <a href="index.html" class="back-btn">Torna alla Home</a>
+        <button id="adminReset" class="reset-btn" onclick="resetLeaderboard()">Reset Classifica</button>
+    </div>
 
     <script>
+        const ADMIN_NAME = "FRODO";
+
         function loadLeaderboard() {
             const tbody = document.getElementById('leaderboard-body');
             const noRecords = document.getElementById('no-records');
+            const resetBtn = document.getElementById('adminReset');
+            const currentUser = localStorage.getItem('cascina_user') || "";
+
+            // Mostra tasto reset solo all'admin
+            if (currentUser.toUpperCase() === ADMIN_NAME) {
+                resetBtn.style.display = 'inline-block';
+            }
             
-            // Carica i record o crea array vuoto
             let records = [];
             try {
                 records = JSON.parse(localStorage.getItem('snake_records')) || [];
             } catch(e) { records = []; }
 
-            // Ordina: dal più alto al più basso
             records.sort((a, b) => b.score - a.score);
-
-            // Prendi i primi 10
             const topTen = records.slice(0, 10);
 
             if (topTen.length === 0) {
+                tbody.innerHTML = '';
                 noRecords.style.display = 'block';
                 return;
             }
 
+            noRecords.style.display = 'none';
             tbody.innerHTML = ''; 
 
             topTen.forEach((entry, index) => {
                 const row = document.createElement('tr');
-                // Se è Frodo, diamogli un tocco speciale
-                if (entry.name.toUpperCase() === "FRODO") {
-                    row.className = "admin-row";
-                }
-
+                if (entry.name.toUpperCase() === ADMIN_NAME) row.className = "admin-row";
                 row.innerHTML = `
                     <td class="rank">#${index + 1}</td>
                     <td class="name">${entry.name.toUpperCase()}</td>
@@ -110,6 +122,13 @@
                 `;
                 tbody.appendChild(row);
             });
+        }
+
+        function resetLeaderboard() {
+            if (confirm("Sei sicuro di voler cancellare TUTTI i record?")) {
+                localStorage.removeItem('snake_records');
+                loadLeaderboard();
+            }
         }
 
         window.onload = loadLeaderboard;

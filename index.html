@@ -14,14 +14,13 @@
     <title>La Cascina Albiate - Digital Experience</title>
 
     <style>
-        /* RESET E SCROLL FISSO */
+        /* RESET E SCROLL */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         html, body { 
             margin: 0; padding: 0; 
             background-color: #050505; color: #fff; 
             font-family: 'Courier New', Courier, monospace;
-            /* Forza lo scroll sempre attivo */
             overflow-y: auto !important;
             min-height: 101vh;
         }
@@ -36,12 +35,12 @@
 
         .logo-box img { width: 150px; margin-bottom: 15px; filter: drop-shadow(0 0 10px #d4af37); }
         
-        #welcome-section { margin-bottom: 30px; min-height: 50px; }
+        #welcome-section { margin-bottom: 25px; min-height: 50px; }
         #welcome-text { color: #d4af37; font-size: 0.9rem; letter-spacing: 1px; font-weight: bold; margin: 0; }
         #change-name { color: #555; font-size: 0.6rem; text-decoration: underline; cursor: pointer; display: none; margin-top: 5px; }
 
-        /* LISTA BOTTONI COMPLETA */
-        .btn-list { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+        /* LISTA BOTTONI */
+        .btn-list { display: flex; flex-direction: column; gap: 12px; width: 100%; align-items: center; }
         
         .btn {
             text-decoration: none; padding: 18px; border-radius: 10px;
@@ -49,16 +48,29 @@
             letter-spacing: 2px; display: block; transition: 0.3s;
             border: 2px solid transparent;
             text-align: center;
+            width: 100%;
+        }
+
+        /* TASTO WIFI: Metà larghezza e più basso */
+        .btn-wifi { 
+            width: 50%; 
+            padding: 10px; 
+            font-size: 0.7rem; 
+            background: #9b59b6; 
+            color: #fff; 
+            margin-bottom: 5px;
+            box-shadow: 0 0 10px rgba(155, 89, 182, 0.4);
         }
 
         .btn-play { background: #2ecc71; color: #000; box-shadow: 0 0 20px rgba(46, 204, 113, 0.4); }
-        .btn-gallery { background: #e67e22; color: #fff; }
+        .btn-bacheca { background: #e67e22; color: #fff; }
+        .btn-gallery { background: #3498db; color: #fff; } /* Azzurro per la Galleria */
         .btn-menu { background: #d4af37; color: #000; }
         .btn-insta { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
         .btn-outline { border: 2px solid rgba(212, 175, 55, 0.5); color: #d4af37; background: rgba(0,0,0,0.5); }
         .btn-small { border: 1px dashed #d4af37; color: #d4af37; background: transparent; font-size: 0.7rem; margin-top: 20px; }
 
-        /* TASTO GRATTA (Slegato e Rotondo) */
+        /* TASTO GRATTA (Flottante) */
         .btn-gratta {
             position: fixed;
             bottom: 25px; right: 20px;
@@ -70,7 +82,6 @@
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
             z-index: 99999;
             border: 3px solid #050505;
-            /* Forza rendering hardware per non sparire */
             transform: translateZ(0);
             -webkit-transform: translateZ(0);
         }
@@ -93,13 +104,16 @@
         </div>
 
         <div class="btn-list">
+            <a href="wifi.html" class="btn btn-wifi">📶 WiFi</a>
+
             <a href="snake.html" class="btn btn-play">🎮 GIOCA A SNAKE</a>
-            <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-gallery">📸 LA VOSTRA GALLERIA</a>
+            <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-bacheca">📸 LA VOSTRA BACHECA</a>
+            <a href="galleria.html" class="btn btn-gallery">🖼️ GALLERIA FOTOGRAFICA</a>
             
-            <div style="height: 1px; background: rgba(212, 175, 55, 0.2); margin: 5px 0;"></div>
+            <div style="height: 1px; background: rgba(212, 175, 55, 0.2); width: 80%; margin: 5px 0;"></div>
             
             <a href="menu.html" class="btn btn-menu">📖 Sfoglia il Menù</a>
-            <a href="javascript:void(0)" onclick="openInstagram()" class="btn btn-insta">📸 Taggaci su Instagram</a>
+            <a href="javascript:void(0)" onclick="openInstagram()" class="btn btn-insta">📸 Instagram</a>
             <a href="tel:0396777270" class="btn btn-outline">📞 Prenota Tavolo</a>
 
             <a href="classifica.html" class="btn btn-small">🏆 Hall of Fame</a>
@@ -114,18 +128,17 @@
                 const userName = localStorage.getItem('cascina_user');
                 const welcomeText = document.getElementById('welcome-text');
                 const changeLink = document.getElementById('change-name');
-                if (userName) {
+                if (userName && userName.trim() !== "") {
                     welcomeText.innerHTML = "CIAO " + userName.toUpperCase() + ", BENTORNATO!";
                     changeLink.style.display = "block";
                 } else {
-                    // Se non c'è l'utente, lo chiediamo dopo un po'
                     setTimeout(askName, 2000);
                 }
             } catch(e) {}
         }
 
         function askName() {
-            let name = prompt("Ciao! Inserisci il tuo nome:");
+            let name = prompt("Ciao! Inserisci il tuo nome per i record:");
             if (name && name.trim() !== "") {
                 try {
                     localStorage.setItem('cascina_user', name.trim());
@@ -141,7 +154,6 @@
             }, 800);
         }
 
-        // CORREZIONE DEFINITIVA SCROLL E VISIBILITÀ
         function forceRefresh() {
             document.body.style.overflowY = "auto";
             checkUser();
