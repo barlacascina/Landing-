@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8GSRKJ2EC8');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>La Cascina Albiate - Digital Experience</title>
+
+    <style>
+        /* RESET E SCROLL FISSO */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        html, body { 
+            margin: 0; padding: 0; 
+            background-color: #050505; color: #fff; 
+            font-family: 'Courier New', Courier, monospace;
+            /* Forza lo scroll sempre attivo */
+            overflow-y: auto !important;
+            min-height: 101vh;
+        }
+
+        .container {
+            width: 90%; max-width: 360px; 
+            margin: 0 auto; 
+            padding: 40px 0 120px 0;
+            text-align: center;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .logo-box img { width: 150px; margin-bottom: 15px; filter: drop-shadow(0 0 10px #d4af37); }
+        
+        #welcome-section { margin-bottom: 30px; min-height: 50px; }
+        #welcome-text { color: #d4af37; font-size: 0.9rem; letter-spacing: 1px; font-weight: bold; margin: 0; }
+        #change-name { color: #555; font-size: 0.6rem; text-decoration: underline; cursor: pointer; display: none; margin-top: 5px; }
+
+        /* LISTA BOTTONI COMPLETA */
+        .btn-list { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+        
+        .btn {
+            text-decoration: none; padding: 18px; border-radius: 10px;
+            font-weight: bold; font-size: 0.85rem; text-transform: uppercase;
+            letter-spacing: 2px; display: block; transition: 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .btn-play { background: #2ecc71; color: #000; box-shadow: 0 0 20px rgba(46, 204, 113, 0.4); }
+        .btn-gallery { background: #e67e22; color: #fff; }
+        .btn-menu { background: #d4af37; color: #000; }
+        .btn-insta { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
+        .btn-outline { border: 2px solid rgba(212, 175, 55, 0.5); color: #d4af37; background: rgba(0,0,0,0.5); }
+        .btn-small { border: 1px dashed #d4af37; color: #d4af37; background: transparent; font-size: 0.7rem; margin-top: 20px; }
+
+        /* TASTO GRATTA (Slegato e Rotondo) */
+        .btn-gratta {
+            position: fixed;
+            bottom: 25px; right: 20px;
+            width: 75px; height: 75px;
+            background: #d4af37; color: #000;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-weight: bold; font-size: 0.75rem;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            z-index: 99999;
+            border: 3px solid #050505;
+            /* Forza rendering hardware per non sparire */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+        }
+
+        .footer { margin-top: 50px; font-size: 0.7rem; color: #444; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+    <a href="gratta.html" class="btn-gratta">GRATTA</a>
+
+    <div class="container">
+        <div class="logo-box">
+            <img src="logo_trasparente.png" alt="Logo La Cascina">
+        </div>
+
+        <div id="welcome-section">
+            <p id="welcome-text">BENVENUTO ALLA CASCINA</p>
+            <span id="change-name" onclick="askName()">Cambia Nickname</span>
+        </div>
+
+        <div class="btn-list">
+            <a href="snake.html" class="btn btn-play">🎮 GIOCA A SNAKE</a>
+            <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-gallery">📸 LA VOSTRA GALLERIA</a>
+            
+            <div style="height: 1px; background: rgba(212, 175, 55, 0.2); margin: 5px 0;"></div>
+            
+            <a href="menu.html" class="btn btn-menu">📖 Sfoglia il Menù</a>
+            <a href="javascript:void(0)" onclick="openInstagram()" class="btn btn-insta">📸 Taggaci su Instagram</a>
+            <a href="tel:0396777270" class="btn btn-outline">📞 Prenota Tavolo</a>
+
+            <a href="classifica.html" class="btn btn-small">🏆 Hall of Fame</a>
+        </div>
+
+        <div class="footer">CASCINA ALBIATE • ARCADE EXPERIENCE</div>
+    </div>
+
+    <script>
+        function checkUser() {
+            try {
+                const userName = localStorage.getItem('cascina_user');
+                const welcomeText = document.getElementById('welcome-text');
+                const changeLink = document.getElementById('change-name');
+                if (userName) {
+                    welcomeText.innerHTML = "CIAO " + userName.toUpperCase() + ", BENTORNATO!";
+                    changeLink.style.display = "block";
+                } else {
+                    // Se non c'è l'utente, lo chiediamo dopo un po'
+                    setTimeout(askName, 2000);
+                }
+            } catch(e) {}
+        }
+
+        function askName() {
+            let name = prompt("Ciao! Inserisci il tuo nome:");
+            if (name && name.trim() !== "") {
+                try {
+                    localStorage.setItem('cascina_user', name.trim());
+                    checkUser();
+                } catch(e) {}
+            }
+        }
+
+        function openInstagram() {
+            window.location.href = "instagram://story-camera";
+            setTimeout(function() { 
+                window.location.href = "https://www.instagram.com/_lacascinadeicanz_/"; 
+            }, 800);
+        }
+
+        // CORREZIONE DEFINITIVA SCROLL E VISIBILITÀ
+        function forceRefresh() {
+            document.body.style.overflowY = "auto";
+            checkUser();
+        }
+
+        window.onload = forceRefresh;
+        window.addEventListener("pageshow", forceRefresh);
+    </script>
+</body>
+</html>
+

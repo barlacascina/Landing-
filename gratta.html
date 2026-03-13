@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SORPRESA - La Cascina</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #d4af37;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            margin: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; overflow: hidden;
+        }
+
+        .container { width: 90%; max-width: 350px; }
+
+        h2 { text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+
+        /* Contenitore Gratta e Vinci */
+        #scratch-container {
+            position: relative;
+            width: 300px; height: 150px;
+            margin: 0 auto;
+            border: 3px solid #d4af37;
+            background-color: #111; /* Colore sotto la grattata */
+            cursor: crosshair;
+            user-select: none;
+        }
+
+        #prize-text {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: bold;
+            color: #fff; text-transform: uppercase;
+            padding: 10px; box-sizing: border-box;
+            z-index: 1;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 2;
+            touch-action: none; /* Fondamentale per il touch mobile */
+        }
+
+        .info-text { font-size: 0.8rem; color: #888; margin-top: 20px; letter-spacing: 1px; }
+        
+        .back-btn {
+            margin-top: 40px; text-decoration: none; color: #d4af37;
+            border: 1px solid #d4af37; padding: 10px 20px; border-radius: 5px;
+            font-size: 0.7rem; text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Sfida la Sorte</h2>
+        <p style="font-size: 0.9rem;">Gratta il riquadro e scopri il tuo destino...</p>
+
+        <div id="scratch-container">
+            <div id="prize-text">Caricamento...</div>
+            <canvas id="scratchCanvas" width="300" height="150"></canvas>
+        </div>
+
+        <p class="info-text" id="status">Usa il dito per grattare!</p>
+
+        <a href="index.html" class="back-btn">Torna alla Home</a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d');
+        const prizeDiv = document.getElementById('prize-text');
+        
+        // Lista dei possibili "Premi" o consigli
+        const prizes = [
+            "Oggi offri tu il giro! 🍻",
+            "Sconto 1€ sull'Aperitivo! 🍹",
+            "Prova il nostro Gin Tonic! 🍸",
+            "Caffè pagato dal tuo amico! ☕",
+            "Offri un drink a chi vuoi tu! ❤️",
+            "Mostra al bar: Sconto 10%! 🎟️",
+            "Sei fortunato: Niente sfortuna! ✨",
+            "Vittoria! Prossimo drink omaggio? 🎁"
+        ];
+
+        // Seleziona un premio a caso
+        prizeDiv.innerText = prizes[Math.floor(Math.random() * prizes.length)];
+
+        // Prepariamo la superficie grigia/oro da grattare
+        function setupCanvas() {
+            ctx.fillStyle = '#777'; // Grigio metallico
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Aggiungiamo una trama "dorata"
+            ctx.fillStyle = '#d4af37';
+            for (let i = 0; i < 100; i++) {
+                ctx.fillRect(Math.random() * 300, Math.random() * 150, 2, 2);
+            }
+            
+            ctx.font = "20px Courier New";
+            ctx.fillStyle = "#333";
+            ctx.textAlign = "center";
+            ctx.fillText("GRATTA QUI", 150, 85);
+        }
+
+        setupCanvas();
+
+        let isDrawing = false;
+
+        function scratch(e) {
+            if (!isDrawing) return;
+            
+            // Gestione coordinate Touch vs Mouse
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.pageX || e.touches[0].pageX) - rect.left;
+            const y = (e.pageY || e.touches[0].pageY) - rect.top;
+
+            ctx.globalCompositeOperation = 'destination-out'; // "Cancella" il grigio
+            ctx.beginPath();
+            ctx.arc(x, y, 20, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Eventi Mouse
+        canvas.addEventListener('mousedown', () => isDrawing = true);
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mousemove', scratch);
+
+        // Eventi Touch (per smartphone)
+        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+        canvas.addEventListener('touchend', () => isDrawing = false);
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); });
+
+    </script>
+</body>
+</html>
