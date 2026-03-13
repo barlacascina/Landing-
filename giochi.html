@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GIOCHI - La Cascina</title>
+    <style>
+        /* RESET E STILE BASE */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: #050505;
+            color: #d4af37;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border: 2px solid #d4af37;
+            background: rgba(212, 175, 55, 0.02);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.1);
+            border-radius: 15px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .game-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* STILE PULSANTI GIOCO */
+        .game-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: #000;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .game-card:active {
+            background: #d4af37;
+            color: #000;
+            transform: scale(0.98);
+        }
+
+        .game-info {
+            text-align: left;
+        }
+
+        .game-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .game-desc {
+            font-size: 0.7rem;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .game-icon {
+            font-size: 1.8rem;
+        }
+
+        /* COLLEGAMENTO CLASSIFICA */
+        .ranking-link {
+            display: block;
+            margin: 10px 0;
+            color: #d4af37;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 5px;
+            border: 1px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 5px;
+        }
+
+        .ranking-link:active {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* PULSANTE TORNA INDIETRO */
+        .back-btn {
+            margin-top: 40px;
+            display: inline-block;
+            text-decoration: none;
+            color: #555;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: #d4af37;
+        }
+
+        .arcade-dot {
+            width: 8px;
+            height: 8px;
+            background: #d4af37;
+            display: inline-block;
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>GIOCHI</h1>
+        
+        <div class="game-menu">
+            <a href="snake.html" class="game-card">
+                <div class="game-info">
+                    <span class="game-title">Snake Arcade</span>
+                    <span class="game-desc">Sfida la classifica</span>
+                </div>
+                <div class="game-icon">🐍</div>
+            </a>
+
+            <a href="classifica.html" class="ranking-link">🏆 Classifica Snake</a>
+
+            <a href="tris.html" class="game-card">
+                <div class="game-info">
+                    <span class="game-title">Tic-Tac-Toe</span>
+                    <span class="game-desc">👤 vs 🤖 o 👤 vs 👤</span>
+                </div>
+                <div class="game-icon">❌</div>
+            </a>
+        </div>
+
+        <p style="margin-top: 25px; font-size: 0.7rem; color: #444;">
+            <span class="arcade-dot"></span> AREA RELAX <span class="arcade-dot"></span>
+        </p>
+    </div>
+
+    <a href="index.html" class="back-btn">Torna alla Home</a>
+
+</body>
+</html>
+
