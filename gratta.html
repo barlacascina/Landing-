@@ -4,140 +4,244 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SORPRESA - La Cascina</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
         body {
-            background-color: #050505;
+            background-color: #050505; 
             color: #d4af37;
             font-family: 'Courier New', Courier, monospace;
             text-align: center;
-            margin: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; overflow: hidden;
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            height: 100vh; 
+            overflow: hidden;
         }
-
-        .container { width: 90%; max-width: 350px; }
-
+        .container { width: 90%; max-width: 350px; position: relative; }
         h2 { text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
 
-        /* Contenitore Gratta e Vinci */
         #scratch-container {
-            position: relative;
-            width: 300px; height: 150px;
-            margin: 0 auto;
+            position: relative; 
+            width: 300px; 
+            height: 150px;
+            margin: 0 auto; 
             border: 3px solid #d4af37;
-            background-color: #111; /* Colore sotto la grattata */
-            cursor: crosshair;
-            user-select: none;
+            background-color: #111; 
+            touch-action: none;
         }
 
         #prize-text {
-            position: absolute;
-            top: 0; left: 0;
+            position: absolute; 
+            top: 0; left: 0; 
             width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; font-weight: bold;
-            color: #fff; text-transform: uppercase;
-            padding: 10px; box-sizing: border-box;
-            z-index: 1;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 1.1rem; 
+            font-weight: bold; 
+            color: #fff;
+            z-index: 1; 
+            text-align: center; 
+            padding: 15px; 
+            box-sizing: border-box;
         }
 
-        canvas {
-            position: absolute;
-            top: 0; left: 0;
-            z-index: 2;
-            touch-action: none; /* Fondamentale per il touch mobile */
+        #scratchCanvas { 
+            position: absolute; 
+            top: 0; left: 0; 
+            z-index: 2; 
+            touch-action: none; 
+            transition: opacity 0.6s ease; 
         }
 
-        .info-text { font-size: 0.8rem; color: #888; margin-top: 20px; letter-spacing: 1px; }
-        
         .back-btn {
-            margin-top: 40px; text-decoration: none; color: #d4af37;
-            border: 1px solid #d4af37; padding: 10px 20px; border-radius: 5px;
-            font-size: 0.7rem; text-transform: uppercase;
+            margin-top: 30px; 
+            display: inline-block; 
+            text-decoration: none; 
+            color: #d4af37; 
+            border: 1px solid #d4af37; 
+            padding: 10px 20px;
+            font-size: 0.8rem; 
+            border-radius: 5px;
+            text-transform: uppercase;
+        }
+
+        #limit-message { 
+            display: none; 
+            padding: 20px; 
+            border: 2px dashed #d4af37; 
+            border-radius: 10px;
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        #status { 
+            font-size: 0.8rem; 
+            color: #888; 
+            margin-top: 15px; 
+            min-height: 1.2rem; 
+            font-weight: bold;
+        }
+
+        @keyframes pulse-vittoria {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); color: #2ecc71; text-shadow: 0 0 20px #2ecc71; }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Sfida la Sorte</h2>
-        <p style="font-size: 0.9rem;">Gratta il riquadro e scopri il tuo destino...</p>
-
-        <div id="scratch-container">
-            <div id="prize-text">Caricamento...</div>
-            <canvas id="scratchCanvas" width="300" height="150"></canvas>
+        <div id="limit-message">
+            <h2 style="color:#fff">ALT! ✋</h2>
+            <p>Hai già tentato la fortuna oggi.</p>
+            <p>Torna a trovarci domani!</p>
         </div>
 
-        <p class="info-text" id="status">Usa il dito per grattare!</p>
+        <div id="game-area">
+            <h2>SFIDA LA SORTE</h2>
+            <div id="scratch-container">
+                <div id="prize-text">Caricamento...</div>
+                <canvas id="scratchCanvas" width="300" height="150"></canvas>
+            </div>
+            <p id="status">Usa il dito per scoprire il premio</p>
+        </div>
 
         <a href="index.html" class="back-btn">Torna alla Home</a>
     </div>
 
     <script>
-        const canvas = document.getElementById('scratchCanvas');
-        const ctx = canvas.getContext('2d');
-        const prizeDiv = document.getElementById('prize-text');
-        
-        // Lista dei possibili "Premi" o consigli
-        const prizes = [
-            "Oggi offri tu il giro! 🍻",
-            "Sconto 1€ sull'Aperitivo! 🍹",
-            "Prova il nostro Gin Tonic! 🍸",
-            "Caffè pagato dal tuo amico! ☕",
-            "Offri un drink a chi vuoi tu! ❤️",
-            "Mostra al bar: Sconto 10%! 🎟️",
-            "Sei fortunato: Niente sfortuna! ✨",
-            "Vittoria! Prossimo drink omaggio? 🎁"
+        // --- CONFIGURAZIONE ---
+        const ADMIN_NAME = "FRODO"; 
+        const PROBABILITA_VINCITA = 10; 
+
+        // ELENCO PREMI VINCENTI (10% di probabilità)
+        const premiVincenti = [
+            "Sconto 10% al Bar! 🎟️",
+            "Caffè offerto dalla Cascina! ☕"
         ];
 
-        // Seleziona un premio a caso
-        prizeDiv.innerText = prizes[Math.floor(Math.random() * prizes.length)];
+        // ELENCO FRASI PERDENTI (90% di probabilità)
+        const frasiPerdenti = [
+            "Hai vinto un sorriso!",
+            "Niente premio, ma sei bellissimo! ✨",
+            "Ritenta domani, sarai più fortunato! 🍀",
+            "Fortunato in amore! ❤️",
+            "La fortuna è cieca, ma il bar è aperto! 🍺"
+        ];
 
-        // Prepariamo la superficie grigia/oro da grattare
-        function setupCanvas() {
-            ctx.fillStyle = '#777'; // Grigio metallico
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const canvas = document.getElementById('scratchCanvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        const prizeDiv = document.getElementById('prize-text');
+        const statusText = document.getElementById('status');
+        const gameArea = document.getElementById('game-area');
+        const limitMessage = document.getElementById('limit-message');
+
+        function sparaCoriandoli() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#d4af37', '#ffffff', '#2ecc71']
+            });
+            prizeDiv.style.animation = "pulse-vittoria 1s ease 3";
+        }
+
+        function init() {
+            let user = "GUEST";
+            try { user = localStorage.getItem('cascina_user') || "GUEST"; } catch(e) {}
             
-            // Aggiungiamo una trama "dorata"
-            ctx.fillStyle = '#d4af37';
-            for (let i = 0; i < 100; i++) {
-                ctx.fillRect(Math.random() * 300, Math.random() * 150, 2, 2);
+            let lastPlay = localStorage.getItem('last_gratta_date');
+            let today = new Date().toDateString();
+
+            if (user.toUpperCase() !== ADMIN_NAME.toUpperCase() && lastPlay === today) {
+                gameArea.style.display = 'none';
+                limitMessage.style.display = 'block';
+                return;
+            }
+
+            let vincente = false;
+            let testoPremio = "";
+
+            // LOGICA DI ESTRAZIONE
+            if (user.toUpperCase() === ADMIN_NAME.toUpperCase()) {
+                // Per l'admin mostriamo un premio reale a caso per testare
+                testoPremio = "TEST: " + premiVincenti[Math.floor(Math.random() * premiVincenti.length)];
+                vincente = true;
+            } else {
+                const random = Math.floor(Math.random() * 100) + 1;
+                if (random <= PROBABILITA_VINCITA) {
+                    testoPremio = premiVincenti[Math.floor(Math.random() * premiVincenti.length)];
+                    vincente = true;
+                } else {
+                    testoPremio = frasiPerdenti[Math.floor(Math.random() * frasiPerdenti.length)];
+                    vincente = false;
+                }
             }
             
-            ctx.font = "20px Courier New";
-            ctx.fillStyle = "#333";
+            prizeDiv.innerText = testoPremio;
+
+            // Disegno copertura
+            ctx.fillStyle = '#777'; 
+            ctx.fillRect(0, 0, 300, 150);
+            ctx.fillStyle = '#d4af37';
+            for(let i=0; i<300; i++) ctx.fillRect(Math.random()*300, Math.random()*150, 2, 2);
+            ctx.font = "bold 18px sans-serif";
+            ctx.fillStyle = "#222";
             ctx.textAlign = "center";
             ctx.fillText("GRATTA QUI", 150, 85);
+
+            let isDrawing = false;
+            let playSaved = false;
+            let isFinished = false;
+
+            function scratch(e) {
+                if (!isDrawing || isFinished) return;
+                e.preventDefault();
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches ? e.touches[0] : e;
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI * 2); ctx.fill();
+
+                if (!playSaved && user.toUpperCase() !== ADMIN_NAME.toUpperCase()) {
+                    localStorage.setItem('last_gratta_date', today);
+                    playSaved = true;
+                }
+
+                const pixels = ctx.getImageData(0, 0, 300, 150).data;
+                let trans = 0;
+                for (let i = 3; i < pixels.length; i += 4) { if (pixels[i] === 0) trans++; }
+                
+                if (trans > (300 * 150 * 0.45)) {
+                    isFinished = true;
+                    canvas.style.opacity = "0";
+                    setTimeout(() => {
+                        canvas.style.display = "none";
+                        if (vincente) {
+                            statusText.innerHTML = "<span style='color:#2ecc71'>HAI VINTO! 🎉</span>";
+                            sparaCoriandoli();
+                        } else {
+                            statusText.innerHTML = "PECCATO! RITENTA DOMANI 😊";
+                        }
+                    }, 600);
+                }
+            }
+
+            canvas.addEventListener('mousedown', () => isDrawing = true);
+            window.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, {passive: false});
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchmove', scratch, {passive: false});
         }
 
-        setupCanvas();
-
-        let isDrawing = false;
-
-        function scratch(e) {
-            if (!isDrawing) return;
-            
-            // Gestione coordinate Touch vs Mouse
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.pageX || e.touches[0].pageX) - rect.left;
-            const y = (e.pageY || e.touches[0].pageY) - rect.top;
-
-            ctx.globalCompositeOperation = 'destination-out'; // "Cancella" il grigio
-            ctx.beginPath();
-            ctx.arc(x, y, 20, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Eventi Mouse
-        canvas.addEventListener('mousedown', () => isDrawing = true);
-        canvas.addEventListener('mouseup', () => isDrawing = false);
-        canvas.addEventListener('mousemove', scratch);
-
-        // Eventi Touch (per smartphone)
-        canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
-        canvas.addEventListener('touchend', () => isDrawing = false);
-        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); scratch(e); });
-
+        window.onload = init;
     </script>
 </body>
 </html>
