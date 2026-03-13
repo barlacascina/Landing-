@@ -1,104 +1,119 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8GSRKJ2EC8');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HALL OF FAME - La Cascina</title>
+    <title>CLASSIFICA - La Cascina</title>
     <style>
         body {
             background-color: #050505;
             color: #d4af37;
             font-family: 'Courier New', Courier, monospace;
-            display: flex; flex-direction: column; align-items: center;
-            padding: 40px 20px; margin: 0;
-        }
-
-        h1 { font-size: 1.5rem; text-align: center; letter-spacing: 4px; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin-bottom: 40px; }
-
-        .leaderboard {
-            width: 100%; max-width: 300px;
-            display: flex; flex-direction: column; gap: 20px;
-        }
-
-        .entry {
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 1.1rem; border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
-            padding-bottom: 5px;
-        }
-
-        .rank { color: #888; font-size: 0.8rem; margin-right: 10px; }
-        .name { flex-grow: 1; text-transform: uppercase; }
-        .score { font-weight: bold; color: #fff; }
-
-        .info-box {
-            margin-top: 50px;
-            padding: 20px;
-            border: 1px solid #444;
-            font-size: 0.7rem;
             text-align: center;
-            line-height: 1.6;
-            color: #888;
+            margin: 0;
+            padding: 20px;
         }
+        h1 { text-transform: uppercase; letter-spacing: 3px; border-bottom: 2px solid #d4af37; display: inline-block; padding-bottom: 10px; }
+        
+        .record-container {
+            max-width: 400px;
+            margin: 30px auto;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid #d4af37;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { border-bottom: 1px solid #d4af37; padding: 10px; font-size: 0.9rem; color: #888; }
+        td { padding: 12px 10px; font-size: 1.1rem; color: #fff; }
+        
+        .rank { color: #d4af37; font-weight: bold; width: 50px; }
+        .name { text-align: left; }
+        .score { text-align: right; color: #2ecc71; font-weight: bold; }
 
         .back-btn {
-            margin-top: 40px;
+            margin-top: 30px;
+            display: inline-block;
             text-decoration: none;
-            color: #fff;
-            border: 1px solid #fff;
+            color: #d4af37;
+            border: 1px solid #d4af37;
             padding: 10px 20px;
+            border-radius: 5px;
+            text-transform: uppercase;
             font-size: 0.8rem;
-            transition: 0.3s;
         }
-        .back-btn:active { background: #fff; color: #000; }
+        
+        .empty-msg { color: #888; font-style: italic; margin-top: 20px; }
+
+        /* Effetto Admin */
+        .admin-row { background: rgba(212, 175, 55, 0.1); }
     </style>
 </head>
 <body>
 
-    <h1>HALL OF FAME</h1>
+    <h1>Hall of Fame</h1>
 
-    <div class="leaderboard">
-        <div class="entry">
-            <span class="rank">01</span>
-            <span class="name">DANIELE</span>
-            <span class="score">420</span>
-        </div>
-        <div class="entry">
-            <span class="rank">02</span>
-            <span class="name">GIULIA</span>
-            <span class="score">280</span>
-        </div>
-        <div class="entry">
-            <span class="rank">03</span>
-            <span class="name">---</span>
-            <span class="score">000</span>
-        </div>
-        <div class="entry">
-            <span class="rank">04</span>
-            <span class="name">---</span>
-            <span class="score">000</span>
-        </div>
-        <div class="entry">
-            <span class="rank">05</span>
-            <span class="name">---</span>
-            <span class="score">000</span>
-        </div>
+    <div class="record-container">
+        <h3 style="margin-top:0;">TOP 10 - SNAKE</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>POS</th>
+                    <th style="text-align: left;">GIOCATORE</th>
+                    <th style="text-align: right;">PUNTI</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+                </tbody>
+        </table>
+        <div id="no-records" class="empty-msg" style="display:none;">Ancora nessun record. Sii il primo!</div>
     </div>
 
-    <div class="info-box">
-        VUOI ENTRARE IN CLASSIFICA?<br>
-        Gioca a Snake, fai un record e mostra lo screenshot al barista per essere inserito nella Hall of Fame!
-    </div>
+    <a href="index.html" class="back-btn">Torna alla Home</a>
 
-    <a href="index.html" class="back-btn">TORNA ALLA HOME</a>
+    <script>
+        function loadLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            const noRecords = document.getElementById('no-records');
+            
+            // Carica i record o crea array vuoto
+            let records = [];
+            try {
+                records = JSON.parse(localStorage.getItem('snake_records')) || [];
+            } catch(e) { records = []; }
 
+            // Ordina: dal più alto al più basso
+            records.sort((a, b) => b.score - a.score);
+
+            // Prendi i primi 10
+            const topTen = records.slice(0, 10);
+
+            if (topTen.length === 0) {
+                noRecords.style.display = 'block';
+                return;
+            }
+
+            tbody.innerHTML = ''; 
+
+            topTen.forEach((entry, index) => {
+                const row = document.createElement('tr');
+                // Se è Frodo, diamogli un tocco speciale
+                if (entry.name.toUpperCase() === "FRODO") {
+                    row.className = "admin-row";
+                }
+
+                row.innerHTML = `
+                    <td class="rank">#${index + 1}</td>
+                    <td class="name">${entry.name.toUpperCase()}</td>
+                    <td class="score">${entry.score}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        window.onload = loadLeaderboard;
+    </script>
 </body>
 </html>
+

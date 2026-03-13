@@ -1,216 +1,192 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-8GSRKJ2EC8');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SNAKE - La Cascina</title>
     <style>
-        * { box-sizing: border-box; }
-        
-        /* SCROLL SBLOCCATO ANCHE QUI */
         body {
             background-color: #050505;
             color: #d4af37;
             font-family: 'Courier New', Courier, monospace;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; margin: 0; padding-top: 20px;
-        }
-
-        .ui { margin-bottom: 10px; text-align: center; width: 100%; }
-        #player-display { font-size: 14px; opacity: 0.8; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
-        .score { font-size: 26px; font-weight: bold; letter-spacing: 2px; }
-
-        .game-container { position: relative; margin-bottom: 20px; }
-        
-        canvas {
-            border: 3px solid #d4af37;
-            background-color: #000;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
-            max-width: 85vw; height: auto;
-            display: block;
-        }
-
-        #overlay {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 10;
-        }
-
-        #startBtn {
-            background: #d4af37; color: #000;
-            border: none; padding: 18px 40px;
-            font-size: 22px; font-weight: bold;
-            font-family: inherit; cursor: pointer;
-            border-radius: 8px; text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(3, 75px);
-            grid-template-rows: repeat(2, 75px);
-            gap: 12px;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            touch-action: manipulation; /* Blocca lo zoom sui tasti, ma permette lo scroll fuori */
+            height: 100vh;
+            overflow: hidden;
+            touch-action: none;
         }
 
-        .btn-ctrl {
-            width: 75px; height: 75px;
-            background: rgba(212, 175, 55, 0.1);
-            border: 2px solid #d4af37; color: #d4af37;
-            border-radius: 50%; font-size: 28px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; user-select: none;
-            -webkit-tap-highlight-color: transparent;
+        #game-container { position: relative; border: 3px solid #d4af37; background-color: #000; }
+        canvas { display: block; background-color: #000; }
+
+        .info { margin-bottom: 10px; font-size: 1.2rem; font-weight: bold; }
+        
+        .controls {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 60px);
+            grid-template-rows: repeat(2, 60px);
+            gap: 10px;
+            justify-content: center;
         }
 
-        .btn-ctrl:active { background: #d4af37; color: #000; }
+        .btn {
+            width: 60px;
+            height: 60px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            user-select: none;
+        }
+
+        .btn:active { background: #d4af37; color: #000; }
         .up { grid-column: 2; }
         .left { grid-column: 1; grid-row: 2; }
         .down { grid-column: 2; grid-row: 2; }
         .right { grid-column: 3; grid-row: 2; }
 
-        .back-btn-container {
-            margin-top: 40px;
-            padding-bottom: 40px;
-            width: 100%;
-            text-align: center;
-        }
-
         .back-btn {
-            text-decoration: none; color: #555;
-            font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #d4af37;
+            font-size: 0.8rem;
+            border: 1px solid #d4af37;
+            padding: 5px 15px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
-    <div class="ui">
-        <div id="player-display">PILOTA: CARICAMENTO...</div>
-        <div class="score">SCORE: <span id="scoreVal">0</span></div>
-    </div>
+    <div class="info">PUNTI: <span id="scoreVal">0</span></div>
 
-    <div class="game-container">
-        <canvas id="gameCanvas" width="300" height="300"></canvas>
-        <div id="overlay">
-            <button id="startBtn" onclick="startGame()">START</button>
-        </div>
+    <div id="game-container">
+        <canvas id="snakeGame" width="300" height="300"></canvas>
     </div>
 
     <div class="controls">
-        <div class="btn-ctrl up" onclick="changeDir('UP')">▲</div>
-        <div class="btn-ctrl left" onclick="changeDir('LEFT')">◀</div>
-        <div class="btn-ctrl down" onclick="changeDir('DOWN')">▼</div>
-        <div class="btn-ctrl right" onclick="changeDir('RIGHT')">▶</div>
+        <div class="btn up" onclick="changeDir('UP')">▲</div>
+        <div class="btn left" onclick="changeDir('LEFT')">◀</div>
+        <div class="btn down" onclick="changeDir('DOWN')">▼</div>
+        <div class="btn right" onclick="changeDir('RIGHT')">▶</div>
     </div>
-    
-    <div class="back-btn-container">
-        <a href="index.html" class="back-btn">← ESCI DAL GIOCO</a>
-    </div>
+
+    <a href="index.html" class="back-btn">Torna alla Home</a>
 
     <script>
-        const canvas = document.getElementById("gameCanvas");
+        const canvas = document.getElementById("snakeGame");
         const ctx = canvas.getContext("2d");
         const scoreElement = document.getElementById("scoreVal");
-        const overlay = document.getElementById("overlay");
-        const startBtn = document.getElementById("startBtn");
-        const playerDisplay = document.getElementById("player-display");
 
-        const playerName = localStorage.getItem('cascina_user') || "GUEST";
-        playerDisplay.innerHTML = "PILOTA: " + playerName.toUpperCase();
+        const box = 20;
+        let snake = [{ x: 140, y: 140 }];
+        let food = {
+            x: Math.floor(Math.random() * 15) * box,
+            y: Math.floor(Math.random() * 15) * box
+        };
+        let d = "RIGHT";
+        let score = 0;
+        let gameActive = true;
 
-        let score, gridSize, snake, dx, dy, foodX, foodY, changingDirection;
-        let gameActive = false;
-        let gameSpeed = 140;
+        // Recupero nome utente
+        const userName = localStorage.getItem('cascina_user') || "GUEST";
 
-        function resetVariables() {
-            score = 0;
-            gridSize = 20;
-            snake = [{x: 160, y: 160}, {x: 140, y: 160}, {x: 120, y: 160}];
-            dx = 20; dy = 0;
-            scoreElement.innerHTML = score;
-            createFood();
+        document.addEventListener("keydown", direction);
+
+        function direction(event) {
+            if (event.keyCode == 37 && d != "RIGHT") d = "LEFT";
+            else if (event.keyCode == 38 && d != "DOWN") d = "UP";
+            else if (event.keyCode == 39 && d != "LEFT") d = "RIGHT";
+            else if (event.keyCode == 40 && d != "UP") d = "DOWN";
         }
 
-        function startGame() {
-            resetVariables();
-            gameActive = true;
-            overlay.style.display = "none";
-            main();
+        function changeDir(newDir) {
+            if (newDir == "LEFT" && d != "RIGHT") d = "LEFT";
+            if (newDir == "UP" && d != "DOWN") d = "UP";
+            if (newDir == "RIGHT" && d != "LEFT") d = "RIGHT";
+            if (newDir == "DOWN" && d != "UP") d = "DOWN";
         }
 
-        function main() {
+        function saveRecord(finalScore) {
+            let records = JSON.parse(localStorage.getItem('snake_records')) || [];
+            
+            // Aggiungiamo il nuovo record
+            records.push({ name: userName, score: finalScore });
+
+            // Ordiniamo e teniamo solo i migliori 50 per non appesantire il telefono
+            records.sort((a, b) => b.score - a.score);
+            records = records.slice(0, 50);
+
+            localStorage.setItem('snake_records', JSON.stringify(records));
+        }
+
+        function draw() {
             if (!gameActive) return;
-            if (didGameEnd()) {
+
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = (i == 0) ? "#d4af37" : "#886d1d";
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeStyle = "black";
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            ctx.fillStyle = "#2ecc71";
+            ctx.fillRect(food.x, food.y, box, box);
+
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (d == "LEFT") snakeX -= box;
+            if (d == "UP") snakeY -= box;
+            if (d == "RIGHT") snakeX += box;
+            if (d == "DOWN") snakeY += box;
+
+            // Mangia cibo
+            if (snakeX == food.x && snakeY == food.y) {
+                score++;
+                scoreElement.innerHTML = score;
+                food = {
+                    x: Math.floor(Math.random() * 15) * box,
+                    y: Math.floor(Math.random() * 15) * box
+                };
+            } else {
+                snake.pop();
+            }
+
+            let newHead = { x: snakeX, y: snakeY };
+
+            // Game Over
+            if (snakeX < 0 || snakeY < 0 || snakeX >= canvas.width || snakeY >= canvas.height || collision(newHead, snake)) {
                 gameActive = false;
-                alert("GAME OVER " + playerName.toUpperCase() + "!\nPunteggio: " + score + "\n\nFai uno screenshot se è il tuo record!");
-                overlay.style.display = "flex";
-                startBtn.innerHTML = "RIGIOCA";
+                saveRecord(score);
+                alert("GAME OVER! Punti: " + score);
+                location.href = "classifica.html"; // Vai alla classifica
                 return;
             }
-            changingDirection = false;
-            setTimeout(function onTick() {
-                clearCanvas(); drawFood(); advanceSnake(); drawSnake(); main();
-            }, gameSpeed);
+
+            snake.unshift(newHead);
         }
 
-        function clearCanvas() {
-            ctx.fillStyle = "black"; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-
-        function drawSnake() {
-            snake.forEach((part, index) => {
-                ctx.fillStyle = (index === 0) ? "#d4af37" : "rgba(212, 175, 55, 0.4)";
-                ctx.fillRect(part.x, part.y, gridSize - 2, gridSize - 2);
-            });
-        }
-
-        function advanceSnake() {
-            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
-            snake.unshift(head);
-            if (snake[0].x === foodX && snake[0].y === foodY) {
-                score += 10; scoreElement.innerHTML = score; createFood();
-            } else { snake.pop(); }
-        }
-
-        function didGameEnd() {
-            for (let i = 4; i < snake.length; i++) {
-                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
+        function collision(head, array) {
+            for (let i = 0; i < array.length; i++) {
+                if (head.x == array[i].x && head.y == array[i].y) return true;
             }
-            return snake[0].x < 0 || snake[0].x > canvas.width - gridSize || snake[0].y < 0 || snake[0].y > canvas.height - gridSize;
+            return false;
         }
 
-        function createFood() {
-            foodX = Math.round((Math.random() * (canvas.width - gridSize)) / gridSize) * gridSize;
-            foodY = Math.round((Math.random() * (canvas.height - gridSize)) / gridSize) * gridSize;
-            snake.forEach(part => { if (part.x == foodX && part.y == foodY) createFood(); });
-        }
-
-        function drawFood() {
-            ctx.fillStyle = "#ff4757"; ctx.fillRect(foodX, foodY, gridSize - 2, gridSize - 2);
-        }
-
-        function changeDir(dir) {
-            if (changingDirection || !gameActive) return;
-            changingDirection = true;
-            if (dir === 'UP' && dy === 0) { dx = 0; dy = -20; }
-            if (dir === 'DOWN' && dy === 0) { dx = 0; dy = 20; }
-            if (dir === 'LEFT' && dx === 0) { dx = -20; dy = 0; }
-            if (dir === 'RIGHT' && dx === 0) { dx = 20; dy = 0; }
-        }
-
-        clearCanvas();
+        let game = setInterval(draw, 150);
     </script>
 </body>
 </html>
