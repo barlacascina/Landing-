@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TRIS - La Cascina</title>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: #050505;
+            color: #d4af37;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        #ui-wrapper { text-align: center; }
+
+        h1 { margin: 0 0 10px 0; letter-spacing: 3px; font-size: 1.8rem; }
+        .status { margin-bottom: 20px; font-size: 1rem; font-weight: bold; height: 24px; color: #fff; text-transform: uppercase; }
+
+        /* MENU */
+        #menu { display: flex; flex-direction: column; gap: 15px; width: 280px; }
+
+        /* GRIGLIA */
+        #game-board {
+            display: none; 
+            grid-template-columns: repeat(3, 90px);
+            grid-template-rows: repeat(3, 90px);
+            gap: 10px;
+            background-color: #d4af37;
+            border: 3px solid #d4af37;
+            padding: 8px;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .cell {
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            height: 90px;
+            width: 90px;
+            cursor: pointer;
+        }
+
+        .cell.x { color: #d4af37; }
+        .cell.o { color: #fff; }
+
+        /* BOTTONI */
+        .btn {
+            padding: 15px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            text-transform: uppercase;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-radius: 8px;
+        }
+
+        .btn:active { background: #d4af37; color: #000; }
+        
+        #controls { display: none; margin-top: 25px; flex-direction: column; gap: 10px; width: 200px; }
+        .btn-small { padding: 8px; font-size: 0.7rem; border-color: #444; color: #444; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="ui-wrapper">
+        <h1>TRIS</h1>
+        <div id="statusText" class="status">Caricamento...</div>
+
+        <div id="menu">
+            <button class="btn" onclick="preStart(false)">👤 vs 👤 2 Giocatori</button>
+            <button class="btn" onclick="preStart(true)">👤 vs 🤖 CPU</button>
+            <a href="index.html" class="btn btn-small" style="color:#d4af37; border-color:#d4af37; margin-top:20px;">Torna alla Home</a>
+        </div>
+
+        <div id="game-board">
+            <div class="cell" onclick="handleTap(0)" data-index="0"></div>
+            <div class="cell" onclick="handleTap(1)" data-index="1"></div>
+            <div class="cell" onclick="handleTap(2)" data-index="2"></div>
+            <div class="cell" onclick="handleTap(3)" data-index="3"></div>
+            <div class="cell" onclick="handleTap(4)" data-index="4"></div>
+            <div class="cell" onclick="handleTap(5)" data-index="5"></div>
+            <div class="cell" onclick="handleTap(6)" data-index="6"></div>
+            <div class="cell" onclick="handleTap(7)" data-index="7"></div>
+            <div class="cell" onclick="handleTap(8)" data-index="8"></div>
+        </div>
+
+        <div id="controls">
+            <button class="btn" onclick="resetBoard()">Ricomincia</button>
+            <button class="btn btn-small" onclick="location.reload()">Cambia Modalità</button>
+        </div>
+    </div>
+
+    <script>
+        // Stato Globale
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let isGameActive = false;
+        let isCpuMode = false;
+        const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+        // Inizializzazione
+        window.onload = () => {
+            document.getElementById('statusText').innerText = "Scegli la modalità";
+        };
+
+        function preStart(mode) {
+            isCpuMode = mode;
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('game-board').style.display = 'grid';
+            document.getElementById('controls').style.display = 'flex';
+            resetBoard();
+        }
+
+        function handleTap(i) {
+            if (!isGameActive || board[i] !== "") return;
+            
+            doMove(i, "X");
+
+            if (isGameActive && isCpuMode) {
+                isGameActive = false; // pausa input
+                setTimeout(() => {
+                    cpuLogic();
+                    if (!checkGameOver("O")) isGameActive = true;
+                }, 600);
+            }
+        }
+
+        function doMove(i, sign) {
+            board[i] = sign;
+            const el = document.querySelector(`[data-index='${i}']`);
+            el.innerText = sign;
+            el.classList.add(sign.toLowerCase());
+            checkGameOver(sign);
+        }
+
+        function cpuLogic() {
+            let move;
+            // 60% intelligenza, 40% caso
+            if (Math.random() < 0.6) {
+                move = getBestMove(board, "O").index;
+            } else {
+                const empty = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+                move = empty[Math.floor(Math.random() * empty.length)];
+            }
+            if (move !== undefined) doMove(move, "O");
+        }
+
+        function checkGameOver(s) {
+            const isWin = wins.some(l => l.every(i => board[i] === s));
+            if (isWin) {
+                document.getElementById('statusText').innerText = "VINCE " + s;
+                isGameActive = false;
+                return true;
+            }
+            if (!board.includes("")) {
+                document.getElementById('statusText').innerText = "PAREGGIO";
+                isGameActive = false;
+                return true;
+            }
+            document.getElementById('statusText').innerText = "Turno: " + (s === "X" ? "O" : "X");
+            return false;
+        }
+
+        function getBestMove(newBoard, p) {
+            let avail = newBoard.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+            if (wins.some(l => l.every(i => newBoard[i] === "X"))) return {score: -10};
+            if (wins.some(l => l.every(i => newBoard[i] === "O"))) return {score: 10};
+            if (avail.length === 0) return {score: 0};
+
+            let moves = [];
+            for (let i = 0; i < avail.length; i++) {
+                let m = { index: avail[i] };
+                newBoard[avail[i]] = p;
+                m.score = getBestMove(newBoard, p === "O" ? "X" : "O").score;
+                newBoard[avail[i]] = "";
+                moves.push(m);
+            }
+
+            let best;
+            if (p === "O") {
+                let bs = -1000;
+                for(let i=0; i<moves.length; i++) { if(moves[i].score > bs) { bs = moves[i].score; best = i; } }
+            } else {
+                let bs = 1000;
+                for(let i=0; i<moves.length; i++) { if(moves[i].score < bs) { bs = moves[i].score; best = i; } }
+            }
+            return moves[best];
+        }
+
+        function resetBoard() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            isGameActive = true;
+            document.getElementById('statusText').innerText = "Tuo turno (X)";
+            document.querySelectorAll('.cell').forEach(c => {
+                c.innerText = "";
+                c.classList.remove('x', 'o');
+            });
+        }
+    </script>
+</body>
+</html>
+
