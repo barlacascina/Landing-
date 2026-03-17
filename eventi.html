@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8GSRKJ2EC8');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8GSRKJ2EC8');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eventi - LA CASCINA</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background-color: #000; color: #eee; margin: 0; padding: 0; }
+        body { font-family: 'Courier New', Courier, monospace; background-color: #050505; color: #eee; margin: 0; padding: 0; }
         header { text-align: center; padding: 30px 20px; border-bottom: 2px solid #d4af37; background: #0a0a0a; }
-        .logo-header { max-width: 150px; width: 100%; height: auto; }
-        .container { max-width: 600px; margin: auto; padding: 20px 20px 100px 20px; }
-        
-        /* Tasto per tornare indietro */
-        .back-btn { display: inline-block; text-decoration: none; color: #d4af37; border: 1px solid #d4af37; padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 30px; text-transform: uppercase; font-weight: bold; }
-        
-        h2 { color: #d4af37; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; font-style: italic; }
-        
-        /* Card Evento */
-        .event-card { background: #111; border-radius: 15px; overflow: hidden; margin-bottom: 30px; border: 1px solid #222; }
-        .event-img { width: 100%; height: 250px; object-fit: cover; border-bottom: 1px solid #d4af37; }
-        .event-content { padding: 20px; }
-        .event-date { color: #d4af37; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .event-title { font-size: 1.5rem; margin: 5px 0 10px 0; color: #fff; font-weight: bold; }
-        .event-details { color: #aaa; font-size: 0.9rem; line-height: 1.5; }
+        .logo-header { max-width: 150px; width: 100%; filter: drop-shadow(0 0 10px #d4af37); }
+        .container { max-width: 500px; margin: auto; padding: 20px 20px 100px 20px; }
+        .back-btn { display: inline-block; text-decoration: none; color: #d4af37; border: 1px solid #d4af37; padding: 8px 15px; border-radius: 20px; font-size: 0.7rem; margin-bottom: 30px; text-transform: uppercase; font-weight: bold; }
+        h2 { color: #d4af37; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+        .event-card { background: #111; border-radius: 15px; overflow: hidden; margin-bottom: 40px; border: 1px solid #222; }
+        .event-img { width: 100%; height: auto; display: block; border-bottom: 1px solid #d4af37; }
+        .event-content { padding: 20px; text-align: center; }
+        .event-date { color: #d4af37; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; display: block; margin-bottom: 10px; }
+        .event-title { font-size: 1.6rem; margin-bottom: 15px; color: #fff; font-weight: bold; }
+        .event-details { color: #aaa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-cal { background: transparent; color: #fff; border: 1px solid #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+        .btn-booking { background: #d4af37; color: #000; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
+        [data-status*="CANCELLAMI_PER_ATTIVARE"] { display: none !important; }
     </style>
 </head>
 <body>
@@ -41,18 +38,36 @@
 
 <div class="container">
     <a href="index.html" class="back-btn">← Home</a>
-    
-    <h2>I Nostri Eventi</h2>
+    <h2>I Prossimi Eventi</h2>
 
-    <div class="event-card">
-        <img src="compblasco.jpeg" class="event-img" alt="Immagine Evento">
-        <div class="event-content">
-            <span class="event-date">Sabato 30 Maggio - ore 21:00</span>
-            <div class="event-title">TRIBUTO A VASCO</div>
-            <div class="event-details">Torna anche quest'anno "La Compagnia del Blasco con il loro tributo a Vasco.</div>
+    <div id="lista-eventi">
+       
+<!-- SOSTITUISCI PER AGGIUNGERE comp <>. --->
+
+        <div class="event-card">
+            <img src="compblasco.jpeg" class="event-img" alt="Tributo a Vasco">
+            <div class="event-content">
+                <span class="event-date">📅 Sabato 30 Maggio - Ore 21:00</span>
+                <div class="event-title">TRIBUTO A VASCO</div>
+                <div class="event-details">Torna a grande richiesta "La Compagnia del Blasco"!🎸</div>
+                <div class="btn-group">
+                    <a href="#" class="btn-cal" data-status="CANCELLAMI_PER_ATTIVARE" onclick="addToCalendar('Tributo a Vasco', '20260530T210000', '20260531T000000')">🗓️ Aggiungi al Calendario</a>
+                    <a href="tel:0396777270" class="btn-booking" data-status="CANCELLAMI_PER_ATTIVARE">📞 Prenota ora</a>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
+</div>
 
+<script>
+    function addToCalendar(title, start, end) {
+        const icsData = "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:" + title + "\nDTSTART:" + start + "\nDTEND:" + end + "\nLOCATION:La Cascina, Albiate\nEND:VEVENT\nEND:VCALENDAR";
+        const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute('download', 'evento.ics');
+        link.click();
+    }
+</script>
 </body>
 </html>
