@@ -1,145 +1,74 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-8GSRKJ2EC8');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-8GSRKJ2EC8');
 </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery - La Cascina</title>
-    <style>
-        :root { --gold: #d4af37; --bg: #000; }
-        body { font-family: sans-serif; background-color: var(--bg); color: #fff; margin: 0; padding: 0; scroll-behavior: smooth; }
-        
-        /* Header */
-        .header { 
-            background: #0a0a0a; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; 
-            border-bottom: 2px solid var(--gold); display: flex; align-items: center;
-        }
-        .btn-back { 
-            text-decoration: none; color: var(--gold); border: 1px solid var(--gold); 
-            padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; 
-        }
-
-        h1 { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; margin: 30px 0; }
-
-        /* Griglia */
-        .gallery-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
-            gap: 8px; padding: 10px; 
-        }
-
-        .gallery-item {
-            display: none; /* Nascosto finché la foto non carica */
-            width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
-            border-radius: 8px; border: 1px solid #222; cursor: pointer;
-            background: #111;
-        }
-
-        .gallery-item.loaded { display: block; }
-
-        /* Effetto di sfumatura in entrata */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.gallery-item.loaded { 
-    display: block;
-    animation: fadeIn 0.6s ease forwards; 
-}
-        
-        .gallery-item img { 
-            width: 100%; height: 100%; object-fit: cover; 
-            display: block; transition: transform 0.3s ease;
-        }
-
-        /* Lightbox */
-        #lightbox {
-            display: none; position: fixed; z-index: 2000;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); align-items: center; justify-content: center;
-        }
-        #lightbox img { 
-            max-width: 95%; max-height: 90%; border-radius: 4px; 
-            box-shadow: 0 0 25px rgba(0,0,0,0.5);
-        }
-
-        /* Tasto Torna Su */
-        #btnTop {
-            display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99;
-            background-color: var(--gold); color: black; border: none; outline: none;
-            cursor: pointer; padding: 12px 15px; border-radius: 50%; font-weight: bold;
-        }
-
-        @media (min-width: 600px) {
-            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding: 20px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery - La Cascina</title>
+<style>
+:root { --gold: #d4af37; --bg: #000; }
+body { font-family: sans-serif; background-color: var(--bg); color: #fff; margin: 0; padding: 0; scroll-behavior: smooth; }
+.header { background: #0a0a0a; padding: 15px 20px; position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--gold); display: flex; align-items: center; }
+.btn-back { text-decoration: none; color: var(--gold); border: 1px solid var(--gold); padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+h1 { text-align: center; color: var(--gold); text-transform: uppercase; letter-spacing: 3px; margin: 30px 0; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; padding: 10px; }
+.gallery-item { width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 8px; border: 1px solid #222; cursor: pointer; background: #111; animation: fadeIn 0.5s ease forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); filter: brightness(0.8); }
+.gallery-item:hover img { transform: scale(1.1); filter: brightness(1.1); }
+#lightbox { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+#lightbox img { max-width: 95%; max-height: 90%; border-radius: 4px; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+#btnTop { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99; background-color: var(--gold); color: black; border: none; padding: 12px 15px; border-radius: 50%; font-weight: bold; }
+@media (min-width: 600px) { .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; padding: 20px; } }
+</style>
 </head>
 <body>
-
-    <div class="header">
-        <a href="index.html" class="btn-back">← Home</a>
-    </div>
-
-    <h1>Gallery</h1>
-
-    <div class="gallery-grid" id="main-grid"></div>
-
-    <div id="lightbox" onclick="this.style.display='none'">
-        <img id="lightbox-img" src="">
-    </div>
-
-    <button onclick="window.scrollTo(0,0)" id="btnTop" title="Torna su">↑</button>
-
-    <script>
-        const grid = document.getElementById('main-grid');
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const btnTop = document.getElementById('btnTop');
-        const maxFoto = 100;
-
-        // Generazione 100 slot
-        for (let i = 1; i <= maxFoto; i++) {
-            const item = document.createElement('div');
-            item.className = 'gallery-item';
-            
-            const img = document.createElement('img');
-            img.src = `foto_${i}.jpg`; // Rinomina i tuoi file come foto_1.jpg, foto_2.jpg...
-            img.alt = `Gallery Item ${i}`;
-            img.loading = "lazy";
-            
-            img.onload = function() {
-                item.classList.add('loaded');
-            };
-
-            item.onclick = function() {
-                lightboxImg.src = this.querySelector('img').src;
-                lightbox.style.display = 'flex';
-            };
-            
-            item.appendChild(img);
-            grid.appendChild(item);
-        }
-
-        // Gestione tasto Torna Su
-        window.onscroll = function() {
-            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
-                btnTop.style.display = "block";
-            } else {
-                btnTop.style.display = "none";
-            }
-        };
-    </script>
-
+<div class="header"><a href="index.html" class="btn-back">← Home</a></div>
+<h1>Gallery</h1>
+<div class="gallery-grid" id="main-grid"></div>
+<div id="lightbox" onclick="this.style.display='none'"><img id="lightbox-img" src=""></div>
+<button onclick="window.scrollTo(0,0)" id="btnTop">↑</button>
+<script>
+const grid = document.getElementById('main-grid');
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+const btnTop = document.getElementById('btnTop');
+async function loadGallery() {
+for (let i = 1; i <= 100; i++) {
+const imgPath = `foto_${i}.jpg`;
+try {
+const exists = await checkImage(imgPath);
+if (exists) createThumb(imgPath);
+} catch (e) { continue; }
+}
+}
+function checkImage(url) {
+return new Promise((resolve) => {
+const img = new Image();
+img.onload = () => resolve(true);
+img.onerror = () => resolve(false);
+img.src = url;
+});
+}
+function createThumb(src) {
+const div = document.createElement('div');
+div.className = 'gallery-item';
+const img = document.createElement('img');
+img.src = src;
+img.loading = "lazy";
+div.onclick = () => { lbImg.src = src; lb.style.display = 'flex'; };
+div.appendChild(img);
+grid.appendChild(div);
+}
+loadGallery();
+window.onscroll = () => { btnTop.style.display = (window.scrollY > 400) ? "block" : "none"; };
+</script>
 </body>
 </html>
 
