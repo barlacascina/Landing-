@@ -36,7 +36,7 @@
         .logo-box img { width: 150px; margin-bottom: 15px; filter: drop-shadow(0 0 10px #d4af37); }
         
         #welcome-section { margin-bottom: 25px; min-height: 50px; }
-        #welcome-text { color: #d4af37; font-size: 0.9rem; letter-spacing: 1px; font-weight: bold; margin: 0; }
+        #welcome-text { color: #d4af37; font-size: 0.9rem; letter-spacing: 1px; font-weight: bold; margin: 0; text-transform: uppercase; }
         #change-name { color: #555; font-size: 0.6rem; text-decoration: underline; cursor: pointer; display: none; margin-top: 5px; }
 
         /* LISTA BOTTONI */
@@ -51,26 +51,15 @@
             width: 100%;
         }
 
-        /* TASTO WIFI: Metà larghezza e più basso */
-        .btn-wifi { 
-            width: 50%; 
-            padding: 10px; 
-            font-size: 0.7rem; 
-            background: #9b59b6; 
-            color: #fff; 
-            margin-bottom: 5px;
-            box-shadow: 0 0 10px rgba(155, 89, 182, 0.4);
-        }
-
+        .btn-wifi { width: 50%; padding: 10px; font-size: 0.7rem; background: #9b59b6; color: #fff; margin-bottom: 5px; box-shadow: 0 0 10px rgba(155, 89, 182, 0.4); }
         .btn-play { background: #2ecc71; color: #000; box-shadow: 0 0 20px rgba(46, 204, 113, 0.4); }
         .btn-bacheca { background: #e67e22; color: #fff; }
-        .btn-gallery { background: #3498db; color: #fff; } /* Azzurro per la Galleria */
+        .btn-eventi { border: 2px solid rgba(212, 175, 55, 0.5) !important; color: #d4af37; background: rgba(0,0,0,0.5); }
+        .btn-gallery { background: #3498db; color: #fff; } 
         .btn-menu { background: #d4af37; color: #000; }
         .btn-insta { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
-        .btn-outline { border: 2px solid rgba(212, 175, 55, 0.5); color: #d4af37; background: rgba(0,0,0,0.5); }
-        .btn-small { border: 1px dashed #d4af37; color: #d4af37; background: transparent; font-size: 0.7rem; margin-top: 20px; }
+        .btn-outline { border: 2px solid rgba(0, 0, 0, 0.4); color: #d4af37; background: rgba(255,255,255,255); }
 
-        /* TASTO GRATTA (Flottante) */
         .btn-gratta {
             position: fixed;
             bottom: 25px; right: 20px;
@@ -82,8 +71,6 @@
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
             z-index: 99999;
             border: 3px solid #050505;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
         }
 
         .footer { margin-top: 50px; font-size: 0.7rem; color: #444; letter-spacing: 2px; }
@@ -95,7 +82,7 @@
 
     <div class="container">
         <div class="logo-box">
-            <img src="logo_trasparente.png" alt="Logo La Cascina">
+            <img src="Logo.jpg" alt="Logo La Cascina">
         </div>
 
         <div id="welcome-section">
@@ -105,18 +92,15 @@
 
         <div class="btn-list">
             <a href="wifi.html" class="btn btn-wifi">📶 WiFi</a>
-
             <a href="giochi.html" class="btn btn-play">🎮 GIOCHI</a>
             <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-bacheca">📸 LA VOSTRA BACHECA</a>
             <a href="galleria.html" class="btn btn-gallery">🖼️ GALLERIA FOTOGRAFICA</a>
-            
             <div style="height: 1px; background: rgba(212, 175, 55, 0.2); width: 80%; margin: 5px 0;"></div>
-            
             <a href="menu.html" class="btn btn-menu">📖 Sfoglia il Menù</a>
+            <a href="eventi.html" class="btn btn-eventi">📆Prossimi eventi📆</a>
             <a href="javascript:void(0)" onclick="openInstagram()" class="btn btn-insta">📸 Instagram</a>
             <a href="tel:0396777270" class="btn btn-outline">📞 Prenota Tavolo</a>
-
-            
+        </div>
 
         <div class="footer">CASCINA ALBIATE • ARCADE EXPERIENCE</div>
     </div>
@@ -127,10 +111,19 @@
                 const userName = localStorage.getItem('cascina_user');
                 const welcomeText = document.getElementById('welcome-text');
                 const changeLink = document.getElementById('change-name');
+                const hour = new Date().getHours();
+                
+                let greeting = "";
+                if (hour >= 5 && hour < 12) greeting = "BUONGIORNO";
+                else if (hour >= 12 && hour < 18) greeting = "BUON POMERIGGIO";
+                else if (hour >= 18 && hour < 22) greeting = "BUON APERITIVO";
+                else greeting = "BUONA SERATA";
+
                 if (userName && userName.trim() !== "") {
-                    welcomeText.innerHTML = "CIAO " + userName.toUpperCase() + ", BENTORNATO!";
+                    welcomeText.innerHTML = greeting + " " + userName.toUpperCase() + ", BENTORNATO!";
                     changeLink.style.display = "block";
                 } else {
+                    welcomeText.innerHTML = greeting + " ALLA CASCINA";
                     setTimeout(askName, 2000);
                 }
             } catch(e) {}
@@ -163,4 +156,3 @@
     </script>
 </body>
 </html>
-
