@@ -10,7 +10,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>La Cascina Albiate - Arcade Experience</title>
+    <title>La Cascina Albiate</title>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { 
@@ -19,122 +19,146 @@
             font-family: 'Courier New', Courier, monospace;
             overflow-x: hidden;
         }
+        
+        .banner-container { 
+            position: relative; 
+            width: 100%; 
+            height: 180px; 
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
+        }
+        .banner-image {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; 
+            object-position: top; 
+            filter: blur(1px) brightness(0.6); 
+            z-index: 1;
+        }
+        
+        .banner-logo-box {
+            position: relative;
+            z-index: 2; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px; 
+        }
+        .banner-logo-box img { 
+            width: 140px; 
+            filter: drop-shadow(0 0 15px #d4af37); 
+            margin-bottom: 5px;
+        }
+        
         .container {
             width: 90%; max-width: 360px; 
             margin: 0 auto; 
-            padding: 30px 0 100px 0;
+            padding: 20px 0 100px 0;
             text-align: center;
             display: flex; flex-direction: column; align-items: center;
         }
-        .logo-box img { width: 160px; margin-bottom: 10px; filter: drop-shadow(0 0 15px #d4af37); }
-        #welcome-section { margin-bottom: 25px; min-height: 60px; }
-        #welcome-text { color: #d4af37; font-size: 1rem; letter-spacing: 1px; font-weight: bold; text-transform: uppercase; margin: 0; }
-        #change-name { color: #555; font-size: 0.6rem; text-decoration: underline; cursor: pointer; display: block; margin-top: 8px; }
-        .btn-list { display: flex; flex-direction: column; gap: 14px; width: 100%; }
-        .btn {
-            text-decoration: none; padding: 18px; border-radius: 12px;
-            font-weight: bold; font-size: 0.9rem; text-transform: uppercase;
-            letter-spacing: 2px; display: block; transition: 0.3s;
-            text-align: center; width: 100%;
-            border: none;
-        }
-        .btn-eventi { 
-            background: #d4af37; color: #000; 
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-            animation: pulse 2s infinite;
-        }
+        
+        #welcome-section { margin-bottom: 25px; min-height: 50px; }
+        #welcome-text { color: #d4af37; font-size: 0.95rem; letter-spacing: 1px; font-weight: bold; text-transform: uppercase; margin: 0; }
+        #change-name { color: #555; font-size: 0.6rem; text-decoration: underline; cursor: pointer; display: block; margin-top: 5px; }
+
+        .btn-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .btn { text-decoration: none; padding: 18px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: block; transition: 0.3s; text-align: center; width: 100%; border: none; }
+        
+        .btn-eventi { background: #d4af37; color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); animation: pulse 2s infinite; }
         .btn-menu { border: 2px solid #d4af37; color: #d4af37; background: rgba(212, 175, 55, 0.05); }
         .btn-outline { background: #fff; color: #000; }
         .btn-insta { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
         .btn-gallery { background: #e91e63; color: #fff; }
-        .btn-bacheca { background: #3498db; color: #fff; font-size: 0.8rem; }
+        .btn-bacheca { background: #3498db; color: #fff; }
+
         .utility-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 10px; }
         .btn-small { padding: 12px; font-size: 0.7rem; border-radius: 8px; }
         .btn-wifi { background: #222; color: #9b59b6; border: 1px solid #9b59b6; }
         .btn-play { background: #222; color: #2ecc71; border: 1px solid #2ecc71; }
-        .gratta-wrapper {
-            position: fixed; bottom: 20px; right: 20px;
-            display: flex; flex-direction: column; align-items: center; z-index: 9999;
+
+        .footer { 
+            margin-top: 50px; 
+            font-size: 0.75rem; 
+            color: #d4af37; 
+            text-align: center; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            border-top: 1px solid rgba(194, 157, 74, 0.2);
+            padding-top: 20px;
+            width: 100%;
         }
-        .gratta-hint {
-            background: #d4af37; color: #000; font-size: 0.6rem; font-weight: bold;
-            padding: 4px 8px; border-radius: 5px; margin-bottom: 5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            animation: bounce 2s infinite;
-        }
-        .btn-gratta {
-            width: 70px; height: 70px; background: #d4af37; color: #000;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; font-weight: bold; font-size: 0.7rem;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); border: 3px solid #050505;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); box-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
-            100% { transform: scale(1); }
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-5px);}
-            60% {transform: translateY(-3px);}
-        }
-        .footer { margin-top: 40px; font-size: 0.65rem; color: #444; letter-spacing: 1px; }
+
+        .gratta-wrapper { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
+        .btn-gratta { width: 65px; height: 65px; background: #d4af37; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: bold; font-size: 0.7rem; box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); border: 3px solid #050505; }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
     <div class="gratta-wrapper">
-        <div class="gratta-hint">HAI SETE? 🍀</div>
         <a href="gratta.html" class="btn-gratta">GRATTA</a>
     </div>
-    <div class="container">
-        <div class="logo-box">
-            <img src="Logo.jpg" alt="La Cascina Albiate">
+
+    <div class="banner-container">
+        <img src="banner.jpg" alt="La Cascina Locale" class="banner-image">
+        <div class="banner-logo-box">
+            <img src="Logo.jpg" alt="La Cascina">
+            <span style="color: #d4af37; font-size: 0.65rem; letter-spacing: 2px;">ALBIATE • EST. 2025</span>
         </div>
+    </div>
+
+    <div class="container">
         <div id="welcome-section">
-            <p id="welcome-text">CARICAMENTO...</p>
+            <p id="welcome-text">BENVENUTI</p>
             <span id="change-name" onclick="askName()">Modifica Nickname</span>
         </div>
+
         <div class="btn-list">
             <a href="eventi.html" class="btn btn-eventi">🔥 PROSSIMI EVENTI 🔥</a>
             <a href="menu.html" class="btn btn-menu">📖 SFOGLIA IL MENÙ</a>
             <a href="tel:0396777270" class="btn btn-outline">📞 PRENOTA UN TAVOLO</a>
+            
             <div style="height: 1px; background: rgba(212, 175, 55, 0.2); margin: 5px 0;"></div>
-            <a href="https://www.instagram.com/_lacascinadeicanz_/" class="btn btn-insta">📸 SEGUICI SU INSTAGRAM</a>
+
+            <a href="https://www.instagram.com/_lacascinadeicanz_/" class="btn btn-insta">📸 INSTAGRAM</a>
             <a href="galleria.html" class="btn btn-gallery">🖼️ GALLERY</a>
-            <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-bacheca">🌟 BACHECA DELLA COMMUNITY</a>
+            <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-bacheca">🌟 BACHECA</a>
+
             <div class="utility-grid">
                 <a href="wifi.html" class="btn btn-small btn-wifi">📶 WI-FI</a>
-                <a href="giochi.html" class="btn btn-small btn-play">🎮 ARCADE</a>
+                <a href="giochi.html" class="btn btn-small btn-play">🎮 GIOCHI</a>
             </div>
         </div>
-        <div class="footer">CASCINA ALBIATE • ARCADE EXPERIENCE</div>
+
+        <div class="footer">CASCINA ALBIATE<br>LA TUA CASCINA DI FAMIGLIA</div>
     </div>
+
     <script>
         function updateUI() {
             const userName = localStorage.getItem('cascina_user');
             const welcomeText = document.getElementById('welcome-text');
             const hour = new Date().getHours();
-            let message = "";
-            if (hour >= 5 && hour < 12) message = "Voglia di Colazione?";
-            else if (hour >= 12 && hour < 15) message = "Pausa Pranzo?";
-            else if (hour >= 15 && hour < 19) message = "Pronto per l'Aperitivo?";
-            else message = "Vivi la serata alla Cascina";
+            let msg = (hour >= 5 && hour < 12) ? "Colazione?" : (hour >= 12 && hour < 15) ? "Pranzo?" : (hour >= 15 && hour < 19) ? "Aperitivo?" : "Buona serata";
             if (welcomeText) {
-                if (userName) {
-                    welcomeText.innerHTML = userName.toUpperCase() + ", " + message.toUpperCase();
-                } else {
-                    welcomeText.innerHTML = message.toUpperCase();
-                }
+                welcomeText.innerHTML = userName ? `${userName.toUpperCase()}, ${msg.toUpperCase()}` : msg.toUpperCase();
             }
         }
+
         function askName() {
-            let name = prompt("Ciao! Come ti chiamano gli amici?");
-            if (name && name.trim() !== "") {
-                localStorage.setItem('cascina_user', name.trim());
-                updateUI();
+            let name = prompt("Come ti chiamano gli amici?");
+            if (name && name.trim() !== "") { 
+                localStorage.setItem('cascina_user', name.trim()); 
+                updateUI(); 
             }
         }
-        window.onload = updateUI;
+
+        window.onload = function() { updateUI(); };
     </script>
 </body>
 </html>
