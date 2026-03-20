@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>La Cascina Albiate | Bar, Eventi e Relax in Brianza</title>
 <meta name="description" content="La Cascina Albiate: locale bar con eventi, aperitivi e relax nel cuore di Albiate (MB). Scopri il menù digitale, gli orari e contattaci su WhatsApp.">
 
-<!-- Open Graph (Social Preview) -->
+<!-- Open Graph -->
 <meta property="og:title" content="La Cascina Albiate | Bar e Eventi in Brianza">
 <meta property="og:description" content="Bar La Cascina ad Albiate: menù digitale, eventi, orari e contatti. Vieni a trovarci!">
 <meta property="og:image" content="https://www.tuosito.it/banner.jpg">
@@ -74,8 +73,8 @@ body { margin:0; padding:0; background:#050505; font-family:Arial,sans-serif; co
 .btn-utility { background:#111; color:#d4af37; border:1px solid #d4af37; box-shadow:0 0 6px rgba(212,175,55,0.3); animation:utilityGlow 2s infinite alternate; }
 @keyframes utilityGlow { 0% {box-shadow:0 0 4px rgba(212,175,55,0.2);} 50% {box-shadow:0 0 12px rgba(212,175,55,0.4);} 100% {box-shadow:0 0 4px rgba(212,175,55,0.2);} }
 
-/* WHATSAPP UTILITY (FULL) */
-.btn-whatsapp { background:#25D366; color:#fff; border:none; box-shadow:0 0 6px rgba(37,211,102,0.5); animation:whatsappGlow 2s infinite alternate; font-size:0.85rem; display:flex; align-items:center; justify-content:center; padding:14px; border-radius:10px; font-weight:bold; }
+/* WHATSAPP FULL BUTTON */
+.btn-whatsapp { background:#25D366; color:#fff; border:none; box-shadow:0 0 6px rgba(37,211,102,0.5); animation:whatsappGlow 2s infinite alternate; font-size:0.85rem; display:flex; align-items:center; justify-content:center; padding:14px; border-radius:10px; font-weight:bold; text-decoration:none; }
 .btn-whatsapp:hover { transform:translateY(-2px); box-shadow:0 0 12px rgba(37,211,102,0.8); }
 @keyframes whatsappGlow { 0% {box-shadow:0 0 6px rgba(37,211,102,0.5);} 50% {box-shadow:0 0 12px rgba(37,211,102,0.8);} 100% {box-shadow:0 0 6px rgba(37,211,102,0.5);} }
 
@@ -142,10 +141,10 @@ body { margin:0; padding:0; background:#050505; font-family:Arial,sans-serif; co
     <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-extra">🌟 La Vostra Bacheca</a>
 
     <div class="utility-grid">
-        <a href="https://wa.me/393478117426" class="btn btn-whatsapp" style="grid-column:span 2;">
-    <img src="whatico.gif" alt="WhatsApp" style="width:30px; height:20px; margin-right:8px; vertical-align:middle;">
-    Scrivici su WhatsApp
-</a>
+        <a id="whatsapp-btn" class="btn btn-whatsapp" style="grid-column:span 2;">
+            <img src="WhatsApp logo.png" alt="WhatsApp" style="width:20px; height:20px; margin-right:8px; vertical-align:middle;">
+            Scrivici su WhatsApp
+        </a>
         <a href="wifi.html" class="btn btn-utility">📶 Wi-Fi</a>
         <a href="giochi.html" class="btn btn-utility">🎮 Giochi</a>
     </div>
@@ -183,10 +182,22 @@ function askName(){
     let name=prompt("Come ti chiamano gli amici?");
     if(name && name.trim()!==""){localStorage.setItem('cascina_user',name.trim()); updateUI();}
 }
+
+// Animazione pulsanti
 window.onload=function(){
     updateUI();
     const buttons=document.querySelectorAll('.btn,.menu-note');
     buttons.forEach((btn,i)=>{ setTimeout(()=>{btn.style.opacity=1;btn.style.transform='translateY(0)';},i*150); });
+
+    // WhatsApp con messaggio personalizzato
+    const whatsappNumber = "393478117426";
+    const defaultMessage = "Ciao! Vorrei informazioni sul menù e gli eventi.";
+    const userName = localStorage.getItem('cascina_user');
+    const personalizedMessage = userName ? `Ciao, sono ${userName}! Vorrei` : defaultMessage;
+    const whatsappBtn = document.getElementById("whatsapp-btn");
+    if (whatsappBtn) {
+        whatsappBtn.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(personalizedMessage)}`;
+    }
 };
 </script>
 
