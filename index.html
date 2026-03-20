@@ -1,165 +1,194 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-8GSRKJ2EC8');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>La Cascina Albiate</title>
-    <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { 
-            margin: 0; padding: 0; 
-            background-color: #050505; color: #fff; 
-            font-family: 'Courier New', Courier, monospace;
-            overflow-x: hidden;
-        }
-        
-        .banner-container { 
-            position: relative; 
-            width: 100%; 
-            height: 180px; 
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3); 
-        }
-        .banner-image {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; 
-            object-position: top; 
-            filter: blur(1px) brightness(0.6); 
-            z-index: 1;
-        }
-        
-        .banner-logo-box {
-            position: relative;
-            z-index: 2; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 10px; 
-        }
-        .banner-logo-box img { 
-            width: 140px; 
-            filter: drop-shadow(0 0 15px #d4af37); 
-            margin-bottom: 5px;
-        }
-        
-        .container {
-            width: 90%; max-width: 360px; 
-            margin: 0 auto; 
-            padding: 20px 0 100px 0;
-            text-align: center;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        
-        #welcome-section { margin-bottom: 25px; min-height: 50px; }
-        #welcome-text { color: #d4af37; font-size: 0.95rem; letter-spacing: 1px; font-weight: bold; text-transform: uppercase; margin: 0; }
-        #change-name { color: #555; font-size: 0.6rem; text-decoration: underline; cursor: pointer; display: block; margin-top: 5px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .btn-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-        .btn { text-decoration: none; padding: 18px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; display: block; transition: 0.3s; text-align: center; width: 100%; border: none; }
-        
-        .btn-eventi { background: #d4af37; color: #000; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); animation: pulse 2s infinite; }
-        .btn-menu { border: 2px solid #d4af37; color: #d4af37; background: rgba(212, 175, 55, 0.05); }
-        .btn-outline { background: #fff; color: #000; }
-        .btn-insta { background: linear-gradient(45deg, #f09433, #dc2743, #bc1888); color: #fff; }
-        .btn-gallery { background: #e91e63; color: #fff; }
-        .btn-bacheca { background: #3498db; color: #fff; }
+<title>La Cascina Albiate | Bar, Eventi e Relax in Brianza</title>
+<meta name="description" content="La Cascina Albiate: locale bar con eventi, aperitivi e relax nel cuore di Albiate (MB). Scopri il menù digitale, gli orari e contattaci su WhatsApp.">
 
-        .utility-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 10px; }
-        .btn-small { padding: 12px; font-size: 0.7rem; border-radius: 8px; }
-        .btn-wifi { background: #222; color: #9b59b6; border: 1px solid #9b59b6; }
-        .btn-play { background: #222; color: #2ecc71; border: 1px solid #2ecc71; }
+<!-- Open Graph (Social Preview) -->
+<meta property="og:title" content="La Cascina Albiate | Bar e Eventi in Brianza">
+<meta property="og:description" content="Bar La Cascina ad Albiate: menù digitale, eventi, orari e contatti. Vieni a trovarci!">
+<meta property="og:image" content="https://www.tuosito.it/banner.jpg">
+<meta property="og:url" content="https://www.tuosito.it/">
+<meta property="og:type" content="website">
 
-        .footer { 
-            margin-top: 50px; 
-            font-size: 0.75rem; 
-            color: #d4af37; 
-            text-align: center; 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            opacity: 0.8;
-            border-top: 1px solid rgba(194, 157, 74, 0.2);
-            padding-top: 20px;
-            width: 100%;
-        }
+<!-- Schema LocalBusiness -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"CafeOrCoffeeShop",
+  "name":"La Cascina Albiate",
+  "image":"https://www.tuosito.it/banner.jpg",
+  "address":{
+    "@type":"PostalAddress",
+    "streetAddress":"Cascina Canzi, 4",
+    "addressLocality":"Albiate",
+    "addressRegion":"MB",
+    "postalCode":"20847",
+    "addressCountry":"IT"
+  },
+  "geo":{
+    "@type":"GeoCoordinates",
+    "latitude":45.6481017,
+    "longitude":9.2488667
+  },
+  "url":"https://www.tuosito.it/",
+  "telephone":"+39396777270",
+  "openingHours":"Mo-Th 06:00-20:00, Fr 06:00-01:00, Sa 07:00-01:00, Su 09:00-13:00,16:30-22:00"
+}
+</script>
 
-        .gratta-wrapper { position: fixed; bottom: 20px; right: 20px; z-index: 9999; }
-        .btn-gratta { width: 65px; height: 65px; background: #d4af37; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: bold; font-size: 0.7rem; box-shadow: 0 0 20px rgba(212, 175, 55, 0.6); border: 3px solid #050505; }
+<style>
+body { margin:0; padding:0; background:#050505; font-family:Arial,sans-serif; color:#fff; text-align:center; }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-    </style>
+/* BANNER */
+.banner { position:relative; height:120px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.banner img.bg { position:absolute; width:100%; height:100%; object-fit:cover; filter:brightness(0.5); z-index:0; }
+.banner .overlay { position:absolute; width:100%; height:100%; background:linear-gradient(to top,rgba(212,175,55,0.4),rgba(212,175,55,0.1)); z-index:1; }
+.banner .logo { position:relative; z-index:10; opacity:0; transform:scale(0.8); animation:logoEnter 1s forwards; }
+.banner .logo img { width:130px; animation:shimmer 3s infinite; }
+@keyframes shimmer { 0% {filter:drop-shadow(0 0 8px #d4af37);} 50% {filter:drop-shadow(0 0 18px #d4af37);} 100% {filter:drop-shadow(0 0 8px #d4af37);} }
+@keyframes logoEnter { to {opacity:1; transform:scale(1);} }
+
+/* CONTENUTO */
+.container { padding:20px; max-width:360px; margin:auto; }
+.hero h1 { color:#d4af37; font-size:1rem; }
+.hero p { color:#aaa; font-size:0.7rem; }
+
+/* BOTTONI */
+.btn { display:block; margin:10px 0; padding:16px; border-radius:10px; font-weight:bold; text-decoration:none; opacity:0; transform:translateY(20px); transition:all 0.4s ease; }
+.btn:hover { transform:translateY(-2px); box-shadow:0 6px 10px rgba(0,0,0,0.4); }
+
+/* Tipi di pulsanti */
+.btn-main { background:#d4af37; color:#000; animation:pulseMain 1.5s infinite alternate; }
+@keyframes pulseMain { 0% {transform:scale(1);} 50% {transform:scale(1.05);} 100% {transform:scale(1);} }
+.btn-eventi { background:#b30000; color:#fff; border:1px solid #d4af37; animation:pulseEvent 1.5s infinite alternate; }
+@keyframes pulseEvent { 0% {transform:scale(1);} 50% {transform:scale(1.04);} 100% {transform:scale(1);} }
+.btn-extra { background:linear-gradient(45deg,#9b59b6,#8e44ad); color:#fff; }
+.btn-menu { background:#111; color:#d4af37; border:2px solid #d4af37; box-shadow:0 0 15px rgba(212,175,55,0.4); animation:menuGlow 2s infinite alternate; }
+@keyframes menuGlow { 0% {box-shadow:0 0 10px rgba(212,175,55,0.3);} 50% {box-shadow:0 0 18px rgba(212,175,55,0.6);} 100% {box-shadow:0 0 10px rgba(212,175,55,0.3);} }
+
+/* UTILITY */
+.btn-utility { background:#111; color:#d4af37; border:1px solid #d4af37; box-shadow:0 0 6px rgba(212,175,55,0.3); animation:utilityGlow 2s infinite alternate; }
+@keyframes utilityGlow { 0% {box-shadow:0 0 4px rgba(212,175,55,0.2);} 50% {box-shadow:0 0 12px rgba(212,175,55,0.4);} 100% {box-shadow:0 0 4px rgba(212,175,55,0.2);} }
+
+/* WHATSAPP UTILITY (FULL) */
+.btn-whatsapp { background:#25D366; color:#fff; border:none; box-shadow:0 0 6px rgba(37,211,102,0.5); animation:whatsappGlow 2s infinite alternate; font-size:0.85rem; display:flex; align-items:center; justify-content:center; padding:14px; border-radius:10px; font-weight:bold; }
+.btn-whatsapp:hover { transform:translateY(-2px); box-shadow:0 0 12px rgba(37,211,102,0.8); }
+@keyframes whatsappGlow { 0% {box-shadow:0 0 6px rgba(37,211,102,0.5);} 50% {box-shadow:0 0 12px rgba(37,211,102,0.8);} 100% {box-shadow:0 0 6px rgba(37,211,102,0.5);} }
+
+/* SCRITTA MENÙ DIGITALE */
+.menu-note { color:#d4af37; font-size:0.75rem; margin-top:-5px; letter-spacing:1px; opacity:0; transform:translateY(10px); transition:all 0.5s ease; animation:menuNoteGlow 2s infinite alternate; }
+@keyframes menuNoteGlow { 0% {text-shadow:0 0 2px rgba(212,175,55,0.2);} 50% {text-shadow:0 0 6px rgba(212,175,55,0.5);} 100% {text-shadow:0 0 2px rgba(212,175,55,0.2);} }
+
+/* GRID */
+.utility-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+
+/* MAPPA */
+.map-container { width:100%; overflow:hidden; border-radius:12px; margin:20px 0; }
+
+/* ORARI */
+.opening-hours { font-size:0.8rem; text-align:left; color:#d4af37; margin-bottom:20px; max-width:360px; margin:auto; }
+
+/* GRATTA */
+.gratta { 
+    position:fixed; 
+    bottom:15px; 
+    right:15px; 
+    width:80px; 
+    height:80px; 
+    border-radius:50%; 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    text-decoration:none; 
+    background:#d4af37; 
+    color:#000; 
+    font-size:2.5rem; 
+    box-shadow:0 0 20px rgba(212,175,55,0.8), 0 4px 10px rgba(0,0,0,0.3); 
+    animation:bounce 1s ease infinite; 
+}
+@keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);} }
+</style>
 </head>
 <body>
-    <div class="gratta-wrapper">
-        <a href="gratta.html" class="btn-gratta">GRATTA</a>
+
+<!-- BANNER -->
+<div class="banner">
+    <img src="banner.jpg" alt="Interni del bar La Cascina Albiate" class="bg">
+    <div class="overlay"></div>
+    <div class="logo">
+        <img src="Logo.jpg" alt="Logo La Cascina Albiate - Bar e locale eventi">
+    </div>
+</div>
+
+<!-- CONTENUTO -->
+<div class="container">
+    <div class="hero">
+        <h1 id="welcome">🍹 Benvenuto alla Cascina Albiate</h1>
+        <p>Il tuo bar per aperitivi, eventi e relax nel cuore di Albiate. Scopri il menù digitale e le nostre serate speciali.</p>
+        <span style="font-size:0.6rem;color:#d4af37;cursor:pointer;" onclick="askName()">Modifica Nickname</span>
     </div>
 
-    <div class="banner-container">
-        <img src="banner.jpg" alt="La Cascina Locale" class="banner-image">
-        <div class="banner-logo-box">
-            <img src="Logo.jpg" alt="La Cascina">
-            <span style="color: #d4af37; font-size: 0.65rem; letter-spacing: 2px;">ALBIATE • EST. 2025</span>
-        </div>
+    <a href="https://g.page/r/TUO-LINK-RECENSIONI/review" class="btn btn-main">⭐ Lascia una recensione</a>
+    <a href="eventi.html" class="btn btn-eventi">🔥 Prossimi eventi</a>
+    <a href="menu.html" class="btn btn-menu">📖 Menù</a>
+    <span class="menu-note">Sfoglia il nostro Menù digitale</span>
+
+    <a href="https://www.instagram.com/_lacascinadeicanz_/" class="btn btn-extra">📸 Seguici su Instagram</a>
+    <a href="galleria.html" class="btn btn-extra">🖼️ Galleria immagini</a>
+    <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-extra">🌟 La Vostra Bacheca</a>
+
+    <div class="utility-grid">
+        <a href="https://wa.me/393478117426" class="btn btn-whatsapp" style="grid-column:span 2;">
+    <img src="whatico.gif" alt="WhatsApp" style="width:30px; height:20px; margin-right:8px; vertical-align:middle;">
+    Scrivici su WhatsApp
+</a>
+        <a href="wifi.html" class="btn btn-utility">📶 Wi-Fi</a>
+        <a href="giochi.html" class="btn btn-utility">🎮 Giochi</a>
     </div>
 
-    <div class="container">
-        <div id="welcome-section">
-            <p id="welcome-text">BENVENUTI</p>
-            <span id="change-name" onclick="askName()">Modifica Nickname</span>
-        </div>
-
-        <div class="btn-list">
-            <a href="eventi.html" class="btn btn-eventi">🔥 PROSSIMI EVENTI 🔥</a>
-            <a href="menu.html" class="btn btn-menu">📖 SFOGLIA IL MENÙ</a>
-            <a href="tel:0396777270" class="btn btn-outline">📞 PRENOTA UN TAVOLO</a>
-            
-            <div style="height: 1px; background: rgba(212, 175, 55, 0.2); margin: 5px 0;"></div>
-
-            <a href="https://www.instagram.com/_lacascinadeicanz_/" class="btn btn-insta">📸 INSTAGRAM</a>
-            <a href="galleria.html" class="btn btn-gallery">🖼️ GALLERY</a>
-            <a href="https://padlet.com/barlacascina/galleria-della-cascina-kerxtbdkhkjpagmw" class="btn btn-bacheca">🌟 BACHECA</a>
-
-            <div class="utility-grid">
-                <a href="wifi.html" class="btn btn-small btn-wifi">📶 WI-FI</a>
-                <a href="giochi.html" class="btn btn-small btn-play">🎮 GIOCHI</a>
-            </div>
-        </div>
-
-        <div class="footer">CASCINA ALBIATE<br>LA TUA CASCINA DI FAMIGLIA</div>
+    <!-- MAPPA -->
+    <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2789.135444101614!2d9.2488667!3d45.6481017!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786bb7eaa2b8047%3A0x211ab212f50ddcaa!2sBar%20La%20Cascina!5e0!3m2!1sit!2sit!4v1773919701323!5m2!1sit!2sit" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
 
-    <script>
-        function updateUI() {
-            const userName = localStorage.getItem('cascina_user');
-            const welcomeText = document.getElementById('welcome-text');
-            const hour = new Date().getHours();
-            let msg = (hour >= 5 && hour < 12) ? "Colazione?" : (hour >= 12 && hour < 15) ? "Pranzo?" : (hour >= 15 && hour < 19) ? "Aperitivo?" : "Buona serata";
-            if (welcomeText) {
-                welcomeText.innerHTML = userName ? `${userName.toUpperCase()}, ${msg.toUpperCase()}` : msg.toUpperCase();
-            }
-        }
+    <!-- ORARI -->
+    <div class="opening-hours">
+        <h3>🕒 Orari di apertura</h3>
+        <p>
+            Lunedì - Giovedì: 06:00 - 20:00<br>
+            Venerdì: 06:00 - 01:00<br>
+            Sabato: 07:00 - 01:00<br>
+            Domenica: 09:00 - 13:00, 16:30 - 22:00
+        </p>
+    </div>
 
-        function askName() {
-            let name = prompt("Come ti chiamano gli amici?");
-            if (name && name.trim() !== "") { 
-                localStorage.setItem('cascina_user', name.trim()); 
-                updateUI(); 
-            }
-        }
+</div>
 
-        window.onload = function() { updateUI(); };
-    </script>
+<!-- GRATTA -->
+<a href="gratta.html" class="gratta">🎁</a>
+
+<script>
+function updateUI(){
+    const userName=localStorage.getItem('cascina_user');
+    const welcome=document.getElementById('welcome');
+    const hour=new Date().getHours();
+    let msg=(hour>=5 && hour<12)?"Buongiorno":(hour>=12 && hour<15)?"Pranzo?":(hour>=15 && hour<19)?"Aperitivo?":"Buona serata";
+    if(welcome){welcome.innerHTML=userName?`${userName.toUpperCase()}, ${msg}`:`🍹 ${msg} alla Cascina`;}
+}
+function askName(){
+    let name=prompt("Come ti chiamano gli amici?");
+    if(name && name.trim()!==""){localStorage.setItem('cascina_user',name.trim()); updateUI();}
+}
+window.onload=function(){
+    updateUI();
+    const buttons=document.querySelectorAll('.btn,.menu-note');
+    buttons.forEach((btn,i)=>{ setTimeout(()=>{btn.style.opacity=1;btn.style.transform='translateY(0)';},i*150); });
+};
+</script>
+
 </body>
 </html>
-
