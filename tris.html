@@ -5,75 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TRIS - La Cascina</title>
 <style>
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    
-    body {
-        background-color: #050505;
-        color: #d4af37;
-        font-family: 'Courier New', Courier, monospace;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        overflow: hidden;
-        touch-action: manipulation;
-    }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-    #ui-wrapper { text-align: center; }
+body {
+    background-color: #050505;
+    color: #d4af37;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+    touch-action: manipulation;
+}
 
-    h1 { margin: 0 0 10px 0; letter-spacing: 3px; font-size: 1.8rem; }
-    .status { margin-bottom: 20px; font-size: 1rem; font-weight: bold; height: 24px; color: #fff; text-transform: uppercase; }
+#ui-wrapper { text-align: center; }
 
-    /* MENU */
-    #menu { display: flex; flex-direction: column; gap: 15px; width: 280px; }
+h1 { margin: 0 0 10px 0; letter-spacing: 3px; font-size: 1.8rem; }
+.status { margin-bottom: 20px; font-size: 1rem; font-weight: bold; height: 24px; color: #fff; text-transform: uppercase; }
 
-    /* GRIGLIA */
-    #game-board {
-        display: none; 
-        grid-template-columns: repeat(3, 90px);
-        grid-template-rows: repeat(3, 90px);
-        gap: 10px;
-        background-color: #d4af37;
-        border: 3px solid #d4af37;
-        padding: 8px;
-        box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
-        display: grid;
-    }
+/* MENU */
+#menu { display: flex; flex-direction: column; gap: 15px; width: 280px; }
 
-    .cell {
-        background-color: #000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 2.5rem;
-        font-weight: bold;
-        height: 90px;
-        width: 90px;
-        cursor: pointer;
-    }
+/* GRIGLIA */
+#game-board {
+    display: none; /* <-- griglia nascosta all'inizio */
+    grid-template-columns: repeat(3, 90px);
+    grid-template-rows: repeat(3, 90px);
+    gap: 10px;
+    background-color: #d4af37;
+    border: 3px solid #d4af37;
+    padding: 8px;
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+}
 
-    .cell.x { color: #d4af37; }
-    .cell.o { color: #fff; }
+.cell {
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    height: 90px;
+    width: 90px;
+    cursor: pointer;
+}
 
-    /* BOTTONI */
-    .btn {
-        padding: 15px;
-        background: rgba(212, 175, 55, 0.1);
-        border: 2px solid #d4af37;
-        color: #d4af37;
-        text-transform: uppercase;
-        font-weight: bold;
-        cursor: pointer;
-        font-size: 0.9rem;
-        border-radius: 8px;
-    }
+.cell.x { color: #d4af37; }
+.cell.o { color: #fff; }
 
-    .btn:active { background: #d4af37; color: #000; }
-    
-    #controls { display: none; margin-top: 25px; flex-direction: column; gap: 10px; width: 200px; }
-    .btn-small { padding: 8px; font-size: 0.7rem; border-color: #444; color: #444; margin-top: 10px; }
+/* BOTTONI */
+.btn {
+    padding: 15px;
+    background: rgba(212, 175, 55, 0.1);
+    border: 2px solid #d4af37;
+    color: #d4af37;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 8px;
+}
+.btn:active { background: #d4af37; color: #000; }
+
+#controls { display: none; margin-top: 25px; flex-direction: column; gap: 10px; width: 200px; }
+.btn-small { padding: 8px; font-size: 0.7rem; border-color: #444; color: #444; margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -117,8 +115,8 @@ window.onload = () => {
     document.getElementById('statusText').innerText = "Scegli la modalità";
 };
 
-function preStart(mode) {
-    isCpuMode = mode;
+function preStart(cpuMode) {
+    isCpuMode = cpuMode;
     document.getElementById('menu').style.display = 'none';
     document.getElementById('game-board').style.display = 'grid';
     document.getElementById('controls').style.display = 'flex';
@@ -130,19 +128,15 @@ function handleTap(i) {
 
     doMove(i, currentPlayer);
 
-    if (!checkGameOver(currentPlayer)) {
-        if (isCpuMode) {
-            // pausa input per CPU
-            isGameActive = false;
-            setTimeout(() => {
-                cpuLogic();
-                if (!checkGameOver("O")) isGameActive = true;
-            }, 600);
-        } else {
-            // alterna giocatore
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-            document.getElementById('statusText').innerText = "Turno: " + currentPlayer;
-        }
+    if (isCpuMode) {
+        isGameActive = false;
+        setTimeout(() => {
+            cpuLogic();
+            if (!checkGameOver("O")) isGameActive = true;
+        }, 600);
+    } else {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        document.getElementById('statusText').innerText = "Turno: " + currentPlayer;
     }
 }
 
@@ -151,6 +145,7 @@ function doMove(i, sign) {
     const el = document.querySelector(`[data-index='${i}']`);
     el.innerText = sign;
     el.classList.add(sign.toLowerCase());
+    checkGameOver(sign);
 }
 
 function cpuLogic() {
@@ -161,7 +156,7 @@ function cpuLogic() {
         const empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
         move = empty[Math.floor(Math.random()*empty.length)];
     }
-    if (move !== undefined) doMove(move, "O");
+    if (move !== undefined) doMove(move,"O");
 }
 
 function checkGameOver(s) {
@@ -176,6 +171,11 @@ function checkGameOver(s) {
         isGameActive = false;
         return true;
     }
+    if (!isCpuMode) {
+        document.getElementById('statusText').innerText = "Turno: " + currentPlayer;
+    } else {
+        document.getElementById('statusText').innerText = "Turno: X";
+    }
     return false;
 }
 
@@ -185,17 +185,17 @@ function getBestMove(newBoard, p) {
     if (wins.some(l=>l.every(i=>newBoard[i]==="O"))) return {score:10};
     if (avail.length===0) return {score:0};
 
-    let moves = [];
-    for (let i=0;i<avail.length;i++){
-        let m = {index: avail[i]};
-        newBoard[avail[i]] = p;
+    let moves=[];
+    for(let i=0;i<avail.length;i++){
+        let m={index:avail[i]};
+        newBoard[avail[i]]=p;
         m.score = getBestMove(newBoard, p==="O"?"X":"O").score;
-        newBoard[avail[i]] = "";
+        newBoard[avail[i]]="";
         moves.push(m);
     }
 
     let best;
-    if (p==="O") {
+    if(p==="O"){
         let bs=-1000;
         for(let i=0;i<moves.length;i++){ if(moves[i].score>bs){ bs=moves[i].score; best=i; } }
     } else {
@@ -206,15 +206,16 @@ function getBestMove(newBoard, p) {
 }
 
 function resetBoard() {
-    board = ["", "", "", "", "", "", "", "", ""];
-    isGameActive = true;
-    currentPlayer = "X";
-    document.getElementById('statusText').innerText = "Turno: " + currentPlayer;
-    document.querySelectorAll('.cell').forEach(c => {
-        c.innerText = "";
+    board=["","","","","","","","",""];
+    isGameActive=true;
+    currentPlayer="X";
+    document.getElementById('statusText').innerText="Tuo turno (X)";
+    document.querySelectorAll('.cell').forEach(c=>{
+        c.innerText="";
         c.classList.remove('x','o');
     });
 }
 </script>
+
 </body>
 </html>
