@@ -13,7 +13,6 @@ body {
     margin: 0;
 }
 
-/* BANNER */
 #banner {
     height: 280px;
     background-size: cover;
@@ -56,7 +55,6 @@ body {
     font-weight: bold;
 }
 
-/* CONTENUTO */
 .container {
     padding: 20px;
 }
@@ -100,20 +98,16 @@ h1 {
     margin-top: 10px;
 }
 
-.actions a {
-    display: inline-block;
-    margin: 5px;
-    padding: 8px 12px;
-    background: #222;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
+/* WHATSAPP GREEN STYLE */
 .whatsapp {
+    display: inline-block;
     background: #25D366;
-    color: black;
+    color: #000;
     font-weight: bold;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 0 10px rgba(37, 211, 102, 0.3);
 }
 
 .badge {
@@ -159,7 +153,6 @@ async function loadEvents() {
             end: ev["fine"] ? new Date(ev["fine"]) : null
         }));
 
-        // ORDINE
         eventi.sort((a, b) => {
             if (!a.start) return 1;
             if (!b.start) return -1;
@@ -174,7 +167,6 @@ async function loadEvents() {
             return b.start - a.start;
         });
 
-        // BANNER = prossimo evento
         const prossimo = eventi.find(e => e.start && e.start > now);
 
         if (prossimo) {
@@ -193,7 +185,6 @@ async function loadEvents() {
             `;
         }
 
-        // LISTA EVENTI
         container.innerHTML = "";
 
         eventi.forEach(ev => {
@@ -230,13 +221,9 @@ async function loadEvents() {
             container.appendChild(div);
         });
 
-        if (eventi.length === 0) {
-            container.innerHTML = "Nessun evento disponibile";
-        }
-
     } catch (err) {
-        console.error(err);
         container.innerHTML = "⚠️ Errore caricamento dati";
+        console.error(err);
     }
 }
 
