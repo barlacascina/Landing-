@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8GSRKJ2EC8');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventi - LA CASCINA</title>
+
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background-color: #050505; color: #eee; margin: 0; padding: 0; }
+        header { text-align: center; padding: 30px 20px; border-bottom: 2px solid #d4af37; background: #0a0a0a; }
+        .logo-header { max-width: 150px; width: 100%; filter: drop-shadow(0 0 10px #d4af37); }
+        .container { max-width: 500px; margin: auto; padding: 20px 20px 100px 20px; }
+        .back-btn { display: inline-block; text-decoration: none; color: #d4af37; border: 1px solid #d4af37; padding: 8px 15px; border-radius: 20px; font-size: 0.7rem; margin-bottom: 30px; text-transform: uppercase; font-weight: bold; }
+        h2 { color: #d4af37; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+
+        .event-card { background: #111; border-radius: 15px; overflow: hidden; margin-bottom: 40px; border: 1px solid #222; }
+        .event-img { width: 100%; height: auto; display: block; border-bottom: 1px solid #d4af37; }
+        .event-content { padding: 20px; text-align: center; }
+        .event-date { color: #d4af37; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; display: block; margin-bottom: 10px; }
+        .event-title { font-size: 1.6rem; margin-bottom: 15px; color: #fff; font-weight: bold; }
+        .event-details { color: #aaa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
+
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-cal { background: transparent; color: #fff; border: 1px solid #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+        .btn-booking { background: #d4af37; color: #000; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img src="logo_trasparente.png" alt="La Cascina" class="logo-header">
+</header>
+
+<div class="container">
+    <a href="index.html" class="back-btn">← Home</a>
+    <h2>I Prossimi Eventi</h2>
+
+    <div id="lista-eventi"></div>
+</div>
+
+<script>
+const API_URL = "https://opensheet.elk.sh/1UNh2jdLhf2wkysFTwjK3CnT-unPeY47vieL1i1AlVNQ/Eventi";
+
+function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleString("it-IT", {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+}
+
+function addToCalendar(title, start, end) {
+    const icsData = "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:" + title + "\nDTSTART:" + start + "\nDTEND:" + end + "\nLOCATION:La Cascina, Albiate\nEND:VEVENT\nEND:VCALENDAR";
+    const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'evento.ics';
+    link.click();
+}
+
+async function loadEvents() {
+    try {
+        const res = await fetch(API_URL);
+        const eventi = await res.json();
+
+        const container = document.getElementById("lista-eventi");
+        container.innerHTML = "";
+
+        const oggi = new Date();
+
+        eventi.forEach(ev => {
+            if (!ev.data) return;
+
+            const dataEvento = new Date(ev.data);
+
+            // ❌ nasconde eventi passati
+            if (dataEvento < oggi) return;
+
+            const card = document.createElement("div");
+            card.className = "event-card";
+
+            card.innerHTML = `
+                <img src="${ev.immagine || ''}" class="event-img">
+                <div class="event-content">
+                    <span class="event-date">📅 ${formatDate(ev.data)}</span>
+                    <div class="event-title">${ev.titolo || ''}</div>
+                    <div class="event-details">${ev.descrizione || ''}</div>
+                    <div class="btn-group">
+                        <a href="#" class="btn-cal"
+                           onclick="addToCalendar('${ev.titolo}', '${ev.data.replace(/[-:]/g,'')}', '${ev.fine.replace(/[-:]/g,'')}')">
+                           🗓️ Aggiungi al Calendario
+                        </a>
+                        <a href="tel:${ev.telefono || ''}" class="btn-booking">📞 Prenota ora</a>
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+
+    } catch (err) {
+        console.error("Errore caricamento eventi:", err);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadEvents);
+</script>
+
+</body>
+</html>
