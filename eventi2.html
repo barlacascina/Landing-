@@ -1,121 +1,246 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8GSRKJ2EC8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-8GSRKJ2EC8');
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eventi</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eventi - LA CASCINA</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #0d0d0d;
+    color: white;
+    margin: 0;
+}
 
-    <style>
-        body { font-family: 'Courier New', Courier, monospace; background-color: #050505; color: #eee; margin: 0; padding: 0; }
-        header { text-align: center; padding: 30px 20px; border-bottom: 2px solid #d4af37; background: #0a0a0a; }
-        .logo-header { max-width: 150px; width: 100%; filter: drop-shadow(0 0 10px #d4af37); }
-        .container { max-width: 500px; margin: auto; padding: 20px 20px 100px 20px; }
-        .back-btn { display: inline-block; text-decoration: none; color: #d4af37; border: 1px solid #d4af37; padding: 8px 15px; border-radius: 20px; font-size: 0.7rem; margin-bottom: 30px; text-transform: uppercase; font-weight: bold; }
-        h2 { color: #d4af37; text-align: center; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+/* BANNER */
+#banner {
+    height: 280px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
 
-        .event-card { background: #111; border-radius: 15px; overflow: hidden; margin-bottom: 40px; border: 1px solid #222; }
-        .event-img { width: 100%; height: auto; display: block; border-bottom: 1px solid #d4af37; }
-        .event-content { padding: 20px; text-align: center; }
-        .event-date { color: #d4af37; font-weight: bold; font-size: 0.9rem; text-transform: uppercase; display: block; margin-bottom: 10px; }
-        .event-title { font-size: 1.6rem; margin-bottom: 15px; color: #fff; font-weight: bold; }
-        .event-details { color: #aaa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
+#banner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
 
-        .btn-group { display: flex; flex-direction: column; gap: 10px; }
-        .btn-cal { background: transparent; color: #fff; border: 1px solid #fff; text-decoration: none; padding: 12px; border-radius: 10px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
-        .btn-booking { background: #d4af37; color: #000; text-decoration: none; padding: 15px; border-radius: 10px; font-weight: bold; text-transform: uppercase; }
-    </style>
+.banner-content {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    z-index: 2;
+}
+
+.banner-content h2 {
+    color: #d4af37;
+    margin: 0;
+}
+
+.banner-content p {
+    margin: 5px 0;
+    color: #ccc;
+}
+
+.banner-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #25D366;
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* CONTENUTO */
+.container {
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #d4af37;
+}
+
+.evento {
+    background: #161616;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.evento h2 {
+    color: #d4af37;
+    text-align: center;
+}
+
+.data {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+}
+
+.evento img {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.evento p {
+    text-align: center;
+    color: #bbb;
+}
+
+.actions {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.actions a {
+    display: inline-block;
+    margin: 5px;
+    padding: 8px 12px;
+    background: #222;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.whatsapp {
+    background: #25D366;
+    color: black;
+    font-weight: bold;
+}
+
+.badge {
+    margin-top: 10px;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.next { background: rgba(212,175,55,0.15); color:#d4af37; }
+.live { background: red; color:white; }
+.past { background:#333; color:#777; }
+</style>
 </head>
 
 <body>
 
-<header>
-    <img src="logo_trasparente.png" alt="La Cascina" class="logo-header">
-</header>
+<div id="banner"></div>
 
 <div class="container">
-    <a href="index.html" class="back-btn">← Home</a>
-    <h2>I Prossimi Eventi</h2>
-
-    <div id="lista-eventi"></div>
+<h1>Eventi</h1>
+<div id="lista-eventi">Caricamento...</div>
 </div>
 
 <script>
 const API_URL = "https://opensheet.elk.sh/1UNh2jdLhf2wkysFTwjK3CnT-unPeY47vieL1i1AlVNQ/foglio1!B:Z";
 
-function formatDate(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleString("it-IT", {
-        weekday: 'long',
-        day: '2-digit',
-        month: 'long',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-function addToCalendar(title, start, end) {
-    const icsData = "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:" + title + "\nDTSTART:" + start + "\nDTEND:" + end + "\nLOCATION:La Cascina, Albiate\nEND:VEVENT\nEND:VCALENDAR";
-    const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'evento.ics';
-    link.click();
-}
-
 async function loadEvents() {
-    try {
-        const res = await fetch(API_URL);
-        const eventi = await res.json();
 
-        const container = document.getElementById("lista-eventi");
+    const container = document.getElementById("lista-eventi");
+
+    try {
+
+        const res = await fetch(API_URL);
+        const data = await res.json();
+
+        const now = new Date();
+
+        let eventi = data.map(ev => ({
+            ...ev,
+            start: ev["Data inizio"] ? new Date(ev["Data inizio"]) : null,
+            end: ev["fine"] ? new Date(ev["fine"]) : null
+        }));
+
+        // ORDINE
+        eventi.sort((a, b) => {
+            if (!a.start) return 1;
+            if (!b.start) return -1;
+
+            const aPast = a.start < now;
+            const bPast = b.start < now;
+
+            if (aPast !== bPast) return aPast ? 1 : -1;
+
+            if (!aPast) return a.start - b.start;
+
+            return b.start - a.start;
+        });
+
+        // BANNER = prossimo evento
+        const prossimo = eventi.find(e => e.start && e.start > now);
+
+        if (prossimo) {
+
+            const telefono = prossimo.telefono ? prossimo.telefono.toString().replace(/\D/g,'') : "";
+            const msg = encodeURIComponent("Ciao! Vorrei prenotare per " + prossimo.titolo);
+
+            document.getElementById("banner").style.backgroundImage = `url('${prossimo.immagine}')`;
+
+            document.getElementById("banner").innerHTML = `
+                <div class="banner-content">
+                    <h2>${prossimo.titolo || ''}</h2>
+                    <p>${prossimo.start ? prossimo.start.toLocaleString("it-IT") : ''}</p>
+                    ${telefono ? `<a class="banner-btn" href="https://wa.me/${telefono}?text=${msg}" target="_blank">Prenota</a>` : ""}
+                </div>
+            `;
+        }
+
+        // LISTA EVENTI
         container.innerHTML = "";
 
-        const oggi = new Date();
-
         eventi.forEach(ev => {
-            if (!ev.data) return;
 
-            const dataEvento = new Date(ev.data);
+            let status = "past";
 
-            // ❌ nasconde eventi passati
-            if (dataEvento < oggi) return;
+            if (ev.start && ev.start > now) status = "next";
+            if (ev.start && ev.end && now >= ev.start && now <= ev.end) status = "live";
 
-            const card = document.createElement("div");
-            card.className = "event-card";
+            const telefono = ev.telefono ? ev.telefono.toString().replace(/\D/g,'') : "";
+            const msg = encodeURIComponent("Ciao! Vorrei prenotare per " + ev.titolo);
 
-            card.innerHTML = `
-                <img src="${ev.immagine || ''}" class="event-img">
-                <div class="event-content">
-                    <span class="event-date">📅 ${formatDate(ev.data)}</span>
-                    <div class="event-title">${ev.titolo || ''}</div>
-                    <div class="event-details">${ev.descrizione || ''}</div>
-                    <div class="btn-group">
-                        <a href="#" class="btn-cal"
-                           onclick="addToCalendar('${ev.titolo}', '${ev.data.replace(/[-:]/g,'')}', '${ev.fine.replace(/[-:]/g,'')}')">
-                           🗓️ Aggiungi al Calendario
-                        </a>
-                        <a href="tel:${ev.telefono || ''}" class="btn-booking">📞 Prenota ora</a>
-                    </div>
+            const div = document.createElement("div");
+            div.className = "evento " + status;
+
+            div.innerHTML = `
+                <h2>${ev.titolo || ''}</h2>
+
+                ${ev.start ? `<p class="data">${ev.start.toLocaleString("it-IT")}</p>` : ""}
+
+                ${ev.immagine ? `<img src="${ev.immagine}">` : ""}
+
+                <p>${ev.descrizione || ''}</p>
+
+                <div class="actions">
+                    ${telefono ? `<a class="whatsapp" href="https://wa.me/${telefono}?text=${msg}" target="_blank">WhatsApp</a>` : ""}
+                </div>
+
+                <div class="badge ${status}">
+                    ${status === "live" ? "IN CORSO 🔥" : status === "next" ? "PROSSIMO" : "PASSATO"}
                 </div>
             `;
 
-            container.appendChild(card);
+            container.appendChild(div);
         });
 
+        if (eventi.length === 0) {
+            container.innerHTML = "Nessun evento disponibile";
+        }
+
     } catch (err) {
-        console.error("Errore caricamento eventi:", err);
+        console.error(err);
+        container.innerHTML = "⚠️ Errore caricamento dati";
     }
 }
 
-document.addEventListener("DOMContentLoaded", loadEvents);
+loadEvents();
 </script>
 
 </body>
